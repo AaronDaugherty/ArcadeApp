@@ -55,7 +55,7 @@ public class ArcadeApp extends Application {
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         HBox hbox2 = new HBox();
-        ImageView img2048 = new ImageView(new Image("file:images/2048/2048Background.jpg"));
+        ImageView img2048 = new ImageView(new Image("file:images/2048/2048Background.png"));
         ImageView imgspaceInv = new ImageView(new Image("file:images/spaceInv/siBackground.jpg"));
         hbox.getChildren().addAll(img2048);
        
