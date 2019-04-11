@@ -12,6 +12,10 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class ArcadeApp extends Application {
 
@@ -26,9 +30,7 @@ public class ArcadeApp extends Application {
      */
     private EventHandler<? super MouseEvent> createMouseHandler() {
 	return event -> {
-	    System.out.println(event);
-	    r.setX(rng.nextDouble() * (640 - r.getWidth()));
-	    r.setY(rng.nextDouble() * (480 - r.getHeight()));
+	    System.out.println("Ya clicked");
 	};
     } // createMouseHandler
 
@@ -41,8 +43,8 @@ public class ArcadeApp extends Application {
     private EventHandler<? super KeyEvent> createKeyHandler() {
 	return event -> {
 	    System.out.println(event);
-	    if (event.getCode() == KeyCode.LEFT)  r.setX(r.getX() - 10.0);
-	    if (event.getCode() == KeyCode.RIGHT) r.setX(r.getX() + 10.0);
+	    if (event.getCode() == KeyCode.LEFT) System.out.println("You clicked left");
+	    if (event.getCode() == KeyCode.RIGHT) System.out.println("You clicked right");
 	    // TODO bounds checking
 	};
     } // createKeyHandler
@@ -50,19 +52,19 @@ public class ArcadeApp extends Application {
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage) {
-
-        /* You are allowed to rewrite this start method, add other methods,
-         * files, classes, etc., as needed. This currently contains some
-         * simple sample code for mouse and keyboard interactions with a node
-         * (rectangle) in a group.
-         */
-
-        r.setX(50);                                // 50px in the x direction (right)
-        r.setY(50);                                // 50ps in the y direction (down)
-        group.getChildren().add(r);                // add to main container
-        r.setOnMouseClicked(createMouseHandler()); // clicks on the rectangle move it randomly
-        group.setOnKeyPressed(createKeyHandler()); // left-right key presses move the rectangle
-
+        VBox vbox = new VBox();
+        HBox hbox = new HBox();
+        HBox hbox2 = new HBox();
+        ImageView img2048 = new ImageView(new Image("file:images/2048/2048Background.jpg"));
+        ImageView imgspaceInv = new ImageView(new Image("file:images/spaceInv/siBackground.jpg"));
+        hbox.getChildren().addAll(img2048);
+       
+        hbox.setOnMouseClicked(createMouseHandler());
+        group.setOnKeyPressed(createKeyHandler());
+        hbox2.getChildren().add(imgspaceInv);
+        vbox.getChildren().addAll(hbox,hbox2);
+        group.getChildren().add(vbox);
+        
         Scene scene = new Scene(group, 1024, 768);
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
