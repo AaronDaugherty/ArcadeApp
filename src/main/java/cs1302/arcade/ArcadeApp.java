@@ -63,10 +63,11 @@ public class ArcadeApp extends Application {
         r.setOnMouseClicked(createMouseHandler()); // clicks on the rectangle move it randomly
         group.setOnKeyPressed(createKeyHandler()); // left-right key presses move the rectangle
 
-        Scene scene = new Scene(group, 640, 480);
+        Scene scene = new Scene(group, 1024, 768);
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
+        stage.setFullScreen(true);
         stage.show();
 
         // the group must request input focus to receive key events
