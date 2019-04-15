@@ -50,8 +50,8 @@ public class ArcadeApp extends Application {
         
         
         //Creating 2048 box
-        ImageView start2048nm = new ImageView(new Image("2048/2048StartButton.png"));
-        ImageView start2048wm = new ImageView(new Image("2048/StartButtonOn.png"));
+        ImageView start2048nm = new ImageView(new Image("2048/2048GreyStart.png"));
+        ImageView start2048wm = new ImageView(new Image("2048/2048RedStart.png"));
         sp2048.getChildren().add(new ImageView(new Image("2048/2048Background.png")));
         bnt2048.setGraphic(start2048nm);
         bnt2048.setPadding(Insets.EMPTY);
@@ -59,7 +59,8 @@ public class ArcadeApp extends Application {
         bnt2048.setOnMouseEntered(e -> bnt2048.setGraphic(start2048wm));
         bnt2048.setOnMouseExited(e -> bnt2048.setGraphic(start2048nm));
         sp2048.getChildren().add(bnt2048);
-        sp2048.setAlignment(bnt2048,Pos.BOTTOM_CENTER); 
+        sp2048.setAlignment(bnt2048,Pos.BOTTOM_CENTER);
+        bnt2048.setTranslateY(-15);
         
 
         //Creating Space Invaders box
