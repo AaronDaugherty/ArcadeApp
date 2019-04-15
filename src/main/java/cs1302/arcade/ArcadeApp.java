@@ -16,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.geometry.Pos;
 
 public class ArcadeApp extends Application {
 
@@ -40,15 +42,22 @@ public class ArcadeApp extends Application {
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage) {
+        StackPane sp2048 = new StackPane();
+        StackPane spInvaders = new StackPane();
         VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        HBox hbox2 = new HBox();
-        hbox.getChildren().add(new ImageView(new Image("file:images/2048/2048Background.png")));
+
+        //Creating 2048 box
+        ImageView start = new ImageView(new Image("file:images/2048/2048StartButton.png"));
+        sp2048.getChildren().add(new ImageView(new Image("file:images/2048/2048Background.png")));
+        sp2048.getChildren().add(start);
+        sp2048.setAlignment(start,Pos.BOTTOM_CENTER); 
+        
+
+        //Creating Space Invaders box
+        spInvaders.getChildren().add(new ImageView(new Image("file:images/spaceInv/siBackground.jpg")));
+
         group.setOnMouseClicked(createMouseHandler());
-        
-        hbox2.getChildren().add(new ImageView(new Image("file:images/spaceInv/siBackground.jpg")));
-        vbox.getChildren().addAll(hbox,hbox2);
-        
+        vbox.getChildren().addAll(sp2048, spInvaders);
         group.getChildren().add(vbox);
         
         Scene scene = new Scene(group, 1024, 768);
