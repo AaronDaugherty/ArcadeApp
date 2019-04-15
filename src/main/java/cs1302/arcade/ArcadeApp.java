@@ -1,7 +1,8 @@
 package cs1302.arcade;
 
+import javafx.geometry.Insets;
 import java.util.Random;
-
+import javafx.scene.control.Button;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -37,7 +38,7 @@ public class ArcadeApp extends Application {
             }
         };
     } // createMouseHandler
-    
+
     
     /** {@inheritdoc} */
     @Override
@@ -45,12 +46,19 @@ public class ArcadeApp extends Application {
         StackPane sp2048 = new StackPane();
         StackPane spInvaders = new StackPane();
         VBox vbox = new VBox();
-
+        Button bnt2048 = new Button();
+        
+        
         //Creating 2048 box
-        ImageView start = new ImageView(new Image("file:images/2048/2048StartButton.png"));
+        ImageView start2048nm = new ImageView(new Image("file:images/2048/2048StartButton.png"));
+        //ImageView start2048wm = new ImageView(new Image());
         sp2048.getChildren().add(new ImageView(new Image("file:images/2048/2048Background.png")));
-        sp2048.getChildren().add(start);
-        sp2048.setAlignment(start,Pos.BOTTOM_CENTER); 
+        bnt2048.setGraphic(start);
+        bnt2048.setPadding(Insets.EMPTY);
+        bnt2048.setStyle("-fx-focus-color: transparent;");
+        bnt2048.setOnMouseEntered();
+        sp2048.getChildren().add(bnt2048);
+        sp2048.setAlignment(bnt2048,Pos.BOTTOM_CENTER); 
         
 
         //Creating Space Invaders box
@@ -66,7 +74,7 @@ public class ArcadeApp extends Application {
         stage.sizeToScene();
         stage.setFullScreen(true);
         stage.show();
-
+        
         // the group must request input focus to receive key events
         // @see https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Node.html#requestFocus--
         group.requestFocus();
