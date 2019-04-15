@@ -7,12 +7,10 @@ that the Markdown is transformed into nice looking HTML.
 
 Here is a sample entry (delete this line; also: feel free to copy/paste/modify):
 
-## SUN 2019-04-05 @ 11:55 PM EST
+## MON 2019-04-15 @ 7:30 PM EST
 
-1. **DONE:** Downloaded the skeleton code.
+1. **DONE:** Chose 2048 and Space Invaders as our games. Formatted start screen with a button to execute 2048. Made art for the start screen. 
 
-2. **TODO:** Finish reading the project description.
+2. **TODO:** Finish start screen. Create logic for 2048.
 
-3. **PROB:** Had a hard time scheduling physicial meetings with each other at
-   first, but now that we've settled on a regular day/time things are looking
-   great!
+3. **PROB:** Had trouble with formatting images. We are still having some problems with making the screen appear to our vision.
