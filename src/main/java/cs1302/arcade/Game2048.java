@@ -8,12 +8,15 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.Group;
+import java.util.ArrayList;
+import java.util.Random;
 public class Game2048 extends Group{
 
     TilePane tiles;
-    ImageView[] images;
+    ArrayList<Tile2048> images;
     ArcadeApp application;
     VBox vbox;
+    Random rand;
     
     public Game2048(ArcadeApp application) {
         this.application = application;
@@ -25,15 +28,29 @@ public class Game2048 extends Group{
         tiles.setPrefRows(4);
         tiles.setMaxSize(560, 560);
         vbox.getChildren().add(tiles);
-        images = new ImageView[16];
+        images = new ArrayList<Tile2048>();
         for(int i = 0; i < 16; i++) {
-            images[i] = new ImageView(new Image("2048/empty.png"));
-            tiles.getChildren().add(images[i]);
+            images.add(new Tile2048());
+            tiles.getChildren().add(images.get(i));
         }
         this.setOnKeyPressed(createKeyHandler());
         this.getChildren().add(vbox);
+        rand = new Random();
     }
-    
+
+    public void spawnTile() {
+        ArrayList<Tile2048> emptyImgs = new ArrayList<>();
+        for(Tile2048 tile : images) {
+            if(tile.isEmpty()) {
+                emptyImgs.add(tile);
+            }
+        }
+        int index = rand.nextInt(emptyImgs.size());
+        emptyImgs.get(index).setImage("2048/2.png");
+        emptyImgs.get(index).setEmpty(false);
+        
+        
+    }
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
@@ -45,6 +62,8 @@ public class Game2048 extends Group{
                 System.out.println("Up");
             } else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
                 System.out.println("Down");
+            } else if (event.getCode() == KeyCode.M){
+                this.spawnTile();
             } else {
                 System.out.println(event);
             }
