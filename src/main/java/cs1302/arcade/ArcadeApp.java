@@ -21,7 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
 
 public class ArcadeApp extends Application {
-
+    Stage stage;
     Group group = new Group();           // main container
 
     /**
@@ -39,11 +39,12 @@ public class ArcadeApp extends Application {
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         StackPane sp2048 = new StackPane();
         StackPane spInvaders = new StackPane();
         VBox vbox = new VBox();
         Button bnt2048 = new Button();
-        Game2048 game2048 = new Game2048();
+        Game2048 game2048 = new Game2048(this);
         
         
         //Creating 2048 box
@@ -70,7 +71,10 @@ public class ArcadeApp extends Application {
         
         Scene scene = new Scene(group, 1024, 768);
         Scene scene2048 = new Scene(game2048, 1024, 768);
-        bnt2048.setOnMouseClicked(e -> stage.setScene(scene2048));
+        bnt2048.setOnMouseClicked(e ->  {
+                stage.setScene(scene2048);
+                game2048.requestFocus();
+            });
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
@@ -80,8 +84,8 @@ public class ArcadeApp extends Application {
         
         // the group must request input focus to receive key events
         // @see https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Node.html#requestFocus--
-        group.requestFocus();
 
     } // start
+
 
 } // ArcadeApp
