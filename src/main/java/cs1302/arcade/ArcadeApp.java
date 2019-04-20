@@ -31,11 +31,7 @@ public class ArcadeApp extends Application {
      */
     private EventHandler<? super MouseEvent> createMouseHandler() {
         return event -> {
-            if(event.getY() < 385) {
-                System.out.println("Launch 2048!");
-            } else if(event.getY() >= 385) {
-                System.out.println("Launch Space Invaders!");
-            }
+            
         };
     } // createMouseHandler
 
@@ -47,6 +43,7 @@ public class ArcadeApp extends Application {
         StackPane spInvaders = new StackPane();
         VBox vbox = new VBox();
         Button bnt2048 = new Button();
+        Game2048 game2048 = new Game2048();
         
         
         //Creating 2048 box
@@ -58,6 +55,7 @@ public class ArcadeApp extends Application {
         bnt2048.setStyle("-fx-focus-color: transparent;");
         bnt2048.setOnMouseEntered(e -> bnt2048.setGraphic(start2048wm));
         bnt2048.setOnMouseExited(e -> bnt2048.setGraphic(start2048nm));
+
         sp2048.getChildren().add(bnt2048);
         sp2048.setAlignment(bnt2048,Pos.BOTTOM_CENTER);
         bnt2048.setTranslateY(-15);
@@ -71,10 +69,13 @@ public class ArcadeApp extends Application {
         group.getChildren().add(vbox);
         
         Scene scene = new Scene(group, 1024, 768);
+        Scene scene2048 = new Scene(game2048, 1024, 768);
+        bnt2048.setOnMouseClicked(e -> stage.setScene(scene2048));
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
         stage.setFullScreen(true);
+        stage.setResizable(false);
         stage.show();
         
         // the group must request input focus to receive key events
