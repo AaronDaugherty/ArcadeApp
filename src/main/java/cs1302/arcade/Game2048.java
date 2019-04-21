@@ -65,7 +65,11 @@ public class Game2048 extends Group{
                         if(number>0) {
                             images[i][k].setNumber(2);
                         } else {
+<<<<<<< HEAD
                             images[i][k].setNumber(4);
+=======
+                            images[i][k].setNumber(2);
+>>>>>>> 63a37b632f32352f95463283929865254ccca158
                         }
                         
                     }
