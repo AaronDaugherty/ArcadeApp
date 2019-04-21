@@ -14,6 +14,10 @@ public class Tile2048 extends ImageView{
         empty = true;
     }
 
+    public boolean canGoLeft(Tile2048[][] images, int i) {
+        return true;
+    }
+
     public boolean isEmpty() {
         return empty;
     }

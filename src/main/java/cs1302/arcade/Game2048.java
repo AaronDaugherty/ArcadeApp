@@ -13,7 +13,7 @@ import java.util.Random;
 public class Game2048 extends Group{
 
     TilePane tiles;
-    ArrayList<Tile2048> images;
+    Tile2048[][] images;
     ArcadeApp application;
     VBox vbox;
     Random rand;
@@ -28,34 +28,55 @@ public class Game2048 extends Group{
         tiles.setPrefRows(4);
         tiles.setMaxSize(560, 560);
         vbox.getChildren().add(tiles);
-        images = new ArrayList<Tile2048>();
-        for(int i = 0; i < 16; i++) {
-            images.add(new Tile2048());
-            tiles.getChildren().add(images.get(i));
+        images = new Tile2048[4][4];
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k < 4; k++) {
+                images[i][k] = new Tile2048();
+                tiles.getChildren().add(images[i][k]);
+            }
         }
         this.setOnKeyPressed(createKeyHandler());
         this.getChildren().add(vbox);
         rand = new Random();
     }
-
+        
     public void spawnTile() {
         ArrayList<Tile2048> emptyImgs = new ArrayList<>();
-        for(Tile2048 tile : images) {
-            if(tile.isEmpty()) {
-                emptyImgs.add(tile);
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k<4; k++) {
+                if(images[i][k].isEmpty()) {
+                    emptyImgs.add(images[i][k]);
+                }
             }
         }
-        int index = rand.nextInt(emptyImgs.size());
-        emptyImgs.get(index).setImage("2048/2.png");
-        emptyImgs.get(index).setEmpty(false);
-        
+        if(emptyImgs.size() > 0) {
+            int index = rand.nextInt(emptyImgs.size());
+            emptyImgs.get(index).setImage("2048/2.png");
+            emptyImgs.get(index).setEmpty(false);
+            for(int i = 0; i < 4; i++) {
+                for(int k = 0; k <4; k++) {
+                    if(emptyImgs.get(index) == images[i][k]) {
+                        images[i][k].setEmpty(false);
+                    }
+                }
+            }
+        } else {
+            this.gameOver();
+        }
         
     }
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
-                System.out.println("Left");
+                for(int i = 1; i < 4; i++) {
+                    for( int k = 0; k<4; k++) {
+                        if(images[i][k].canGoLeft(images, i)) {
+                            
+                        }
+                    }
+                }
+                
             } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                 System.out.println("Right");
             } else if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
@@ -76,6 +97,10 @@ public class Game2048 extends Group{
             this.requestFocus();
         }
 
+    }
+
+    public void gameOver() {
+        System.out.println("Game Over");
     }
 
     
