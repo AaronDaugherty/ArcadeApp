@@ -51,15 +51,33 @@ public class Game2048 extends Group{
         }
         if(emptyImgs.size() > 0) {
             int index = rand.nextInt(emptyImgs.size());
-            emptyImgs.get(index).setImage("2048/2.png");
+            int number = rand.nextInt(9);
+            if(number > 0) {
+                emptyImgs.get(index).setImage("2048/2.png");
+            } else {
+                emptyImgs.get(index).setImage("2048/4.png");               
+            }
             emptyImgs.get(index).setEmpty(false);
             for(int i = 0; i < 4; i++) {
                 for(int k = 0; k <4; k++) {
                     if(emptyImgs.get(index) == images[i][k]) {
                         images[i][k].setEmpty(false);
+                        if(number>0) {
+                            images[i][k].setNumber(2);
+                        } else {
+                            images[i][k].setNumber(4);
+                        }
+                        
                     }
                 }
             }
+            for(int i = 0; i < 4; i++) {
+                for(int k = 0; k < 4 ;k++) {
+                    Tile2048 a = images[i][k];
+                    //System.out.println("Tile "+i+"-"+k+" Empty: "+a.isEmpty() + " Number: "+a.getNumber());
+                }
+            }
+            //System.out.println();
         } else {
             this.gameOver();
         }
@@ -68,15 +86,25 @@ public class Game2048 extends Group{
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
+            ArrayList<Tile2048> moveTiles = new ArrayList<Tile2048>();
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
-                for(int i = 1; i < 4; i++) {
-                    for( int k = 0; k<4; k++) {
-                        if(images[i][k].canGoLeft(images, i)) {
-                            
+                for(int i = 0; i < 4; i++) {
+                    for( int k = 1; k<4; k++) {
+                        Tile2048 currTile= images[i][k];
+                        if(!currTile.isEmpty()) {
+                            if(currTile.canGoLeft(images, i, k) > 0) {
+                                currTile.setMoveNumber(currTile.canGoLeft(images,i,k));
+                            }
                         }
                     }
                 }
-                
+                for(int i = 0; i < 4; i++) {
+                    for(int k = 0; k < 4; k++) {
+                        int moveAmount = images[i][k].getMoveNumber() * 134;
+                        images[i][k].setTranslateX(images[i][k].getTranslateX() - moveAmount);
+                    }
+                }
+            
             } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                 System.out.println("Right");
             } else if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
