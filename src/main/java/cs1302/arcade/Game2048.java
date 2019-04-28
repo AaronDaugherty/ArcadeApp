@@ -71,13 +71,13 @@ public class Game2048 extends Group{
                     }
                 }
             }
-            for(int i = 0; i < 4; i++) {
-                for(int k = 0; k < 4 ;k++) {
+            /**for(int i = 0; i < 4; i++) {
+                  for(int k = 0; k < 4 ;k++) {
                     Tile2048 a = images[i][k];
-                    //System.out.println("Tile "+i+"-"+k+" Empty: "+a.isEmpty() + " Number: "+a.getNumber());
+                    System.out.println("Tile "+i+"-"+k+" Empty: "+a.isEmpty() + " Number: "+a.getNumber());
                 }
-            }
-            //System.out.println();
+                }*/
+            System.out.println();
         } else {
             this.gameOver();
         }
@@ -86,25 +86,8 @@ public class Game2048 extends Group{
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
-            ArrayList<Tile2048> moveTiles = new ArrayList<Tile2048>();
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
-                for(int i = 0; i < 4; i++) {
-                    for( int k = 1; k<4; k++) {
-                        Tile2048 currTile= images[i][k];
-                        if(!currTile.isEmpty()) {
-                            if(currTile.canGoLeft(images, i, k) > 0) {
-                                currTile.setMoveNumber(currTile.canGoLeft(images,i,k));
-                            }
-                        }
-                    }
-                }
-                for(int i = 0; i < 4; i++) {
-                    for(int k = 0; k < 4; k++) {
-                        int moveAmount = images[i][k].getMoveNumber() * 134;
-                        images[i][k].setTranslateX(images[i][k].getTranslateX() - moveAmount);
-                    }
-                }
-            
+                this.shiftLeft();
             } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                 System.out.println("Right");
             } else if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
@@ -117,6 +100,14 @@ public class Game2048 extends Group{
                 System.out.println(event);
             }
         };
+    }
+
+    public void shiftLeft() {
+        Tile2048[][] newTiles = new Tile2048[4][4]();
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k<4;k++) {
+                newTiles[i][k] = 
+            
     }
     
     public void playGame() {
