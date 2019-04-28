@@ -54,40 +54,21 @@ public class Game2048 extends Group{
             int number = rand.nextInt(9);
             if(number > 0) {
                 emptyImgs.get(index).setImage("2048/2.png");
+                emptyImgs.get(index).setNumber(2);
             } else {
-                emptyImgs.get(index).setImage("2048/4.png");               
+                emptyImgs.get(index).setImage("2048/4.png");
+                emptyImgs.get(index).setNumber(4);
             }
-            emptyImgs.get(index).setEmpty(false);
-            for(int i = 0; i < 4; i++) {
-                for(int k = 0; k <4; k++) {
-                    if(emptyImgs.get(index) == images[i][k]) {
-                        images[i][k].setEmpty(false);
-                        if(number>0) {
-                            images[i][k].setNumber(2);
-                        } else {
-                            images[i][k].setNumber(4);
-                        }
-                        
-                    }
-                }
-            }
-            /**for(int i = 0; i < 4; i++) {
-                  for(int k = 0; k < 4 ;k++) {
-                    Tile2048 a = images[i][k];
-                    System.out.println("Tile "+i+"-"+k+" Empty: "+a.isEmpty() + " Number: "+a.getNumber());
-                }
-                }*/
-            System.out.println();
+            emptyImgs.get(index).setEmpty(false);                                            
         } else {
             this.gameOver();
         }
-        
     }
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
-                this.shiftLeft();
+                System.out.println("Left");
             } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                 System.out.println("Right");
             } else if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
@@ -102,13 +83,7 @@ public class Game2048 extends Group{
         };
     }
 
-    public void shiftLeft() {
-        Tile2048[][] newTiles = new Tile2048[4][4]();
-        for(int i = 0; i < 4; i++) {
-            for(int k = 0; k<4;k++) {
-                newTiles[i][k] = 
-            
-    }
+    
     
     public void playGame() {
         boolean gameOver = false;
