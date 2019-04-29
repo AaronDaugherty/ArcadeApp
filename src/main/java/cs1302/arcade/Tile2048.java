@@ -16,6 +16,19 @@ public class Tile2048 extends ImageView{
         moveNumber = 0;
     }
 
+    public void swap(Tile2048 tile) {
+        boolean tempBool = tile.isEmpty();
+        int tempNumber = tile.getNumber();
+        tile.setEmpty(this.isEmpty());
+        tile.setNumber(this.getNumber());
+        this.setNumber(tempNumber);
+        this.setEmpty(tempBool);
+    }
+
+    public String getUrl() {
+        return "2048/"+this.getNumber()+".png";
+    }
+
     public void setMoveNumber(int moveNumber) {
         this.moveNumber = moveNumber;
     }

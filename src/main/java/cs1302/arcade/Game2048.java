@@ -91,9 +91,7 @@ public class Game2048 extends Group{
             for(int k = 0; k<4;k++) {
                 for(int j = k; j > 0; j--) {
                     if(tiles[i][j-1].isEmpty() && !tiles[i][j].isEmpty()) {
-                        Tile2048 temp = tiles[i][j-1];
-                        tiles[i][j-1] = tiles[i][j];
-                        tiles[i][j] = temp;
+                        tiles[i][j].swap(tiles[i][j-1]);
                         System.out.println("AJFOJIAJFOIA");
                     }
                     
@@ -102,8 +100,8 @@ public class Game2048 extends Group{
         }
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
-                tiles[i][k].setImage(new Image("2048/"+tiles[i][k].getNumber()+".png"));
-                System.out.println("2048/"+tiles[i][k].getNumber()+".png");
+                tiles[i][k].setImage(new Image(tiles[i][k].getUrl()));
+                System.out.println(tiles[i][k].getUrl());
             }
         }
     }
