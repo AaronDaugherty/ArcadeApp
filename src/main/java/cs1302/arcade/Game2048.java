@@ -102,7 +102,7 @@ public class Game2048 extends Group{
         }
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
-                tiles[i][k].setImage(new Image("2048/"+tiles[i][k].getNumber()+".png"));
+                tiles[i][k].setImage(new Image("2048/"+tiles[i][k].getNumber()+".png));
                 System.out.println("2048/"+tiles[i][k].getNumber()+".png");
             }
         }
