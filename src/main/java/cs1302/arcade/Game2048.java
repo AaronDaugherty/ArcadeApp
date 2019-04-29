@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Random;
 public class Game2048 extends Group{
 
-    TilePane tiles;
-    Tile2048[][] images;
+    TilePane pane;
+    Tile2048[][] tiles;
     ArcadeApp application;
     VBox vbox;
     Random rand;
@@ -21,18 +21,18 @@ public class Game2048 extends Group{
     public Game2048(ArcadeApp application) {
         this.application = application;
         vbox = new VBox();
-        tiles = new TilePane();
-        tiles.setHgap(8);
-        tiles.setVgap(8);
-        tiles.setPrefColumns(4);
-        tiles.setPrefRows(4);
-        tiles.setMaxSize(560, 560);
-        vbox.getChildren().add(tiles);
-        images = new Tile2048[4][4];
+        pane = new TilePane();
+        pane.setHgap(8);
+        pane.setVgap(8);
+        pane.setPrefColumns(4);
+        pane.setPrefRows(4);
+        pane.setMaxSize(560, 560);
+        vbox.getChildren().add(pane);
+        tiles = new Tile2048[4][4];
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
-                images[i][k] = new Tile2048();
-                tiles.getChildren().add(images[i][k]);
+                tiles[i][k] = new Tile2048();
+                pane.getChildren().add(tiles[i][k]);
             }
         }
         this.setOnKeyPressed(createKeyHandler());
@@ -44,8 +44,8 @@ public class Game2048 extends Group{
         ArrayList<Tile2048> emptyImgs = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4; k++) {
-                if(images[i][k].isEmpty()) {
-                    emptyImgs.add(images[i][k]);
+                if(tiles[i][k].isEmpty()) {
+                    emptyImgs.add(tiles[i][k]);
                 }
             }
         }
@@ -60,12 +60,12 @@ public class Game2048 extends Group{
             emptyImgs.get(index).setEmpty(false);
             for(int i = 0; i < 4; i++) {
                 for(int k = 0; k <4; k++) {
-                    if(emptyImgs.get(index) == images[i][k]) {
-                        images[i][k].setEmpty(false);
+                    if(emptyImgs.get(index) == tiles[i][k]) {
+                        tiles[i][k].setEmpty(false);
                         if(number>0) {
-                            images[i][k].setNumber(2);
+                            tiles[i][k].setNumber(2);
                         } else {
-                            images[i][k].setNumber(4);
+                            tiles[i][k].setNumber(4);
                         }
                         
                     }
@@ -73,7 +73,7 @@ public class Game2048 extends Group{
             }
             /**for(int i = 0; i < 4; i++) {
                   for(int k = 0; k < 4 ;k++) {
-                    Tile2048 a = images[i][k];
+                    Tile2048 a = tiles[i][k];
                     System.out.println("Tile "+i+"-"+k+" Empty: "+a.isEmpty() + " Number: "+a.getNumber());
                 }
                 }*/
@@ -103,12 +103,42 @@ public class Game2048 extends Group{
     }
 
     public void shiftLeft() {
-        Tile2048[][] newTiles = new Tile2048[4][4]();
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4;k++) {
-                newTiles[i][k] = 
-            
+                for(int j = k; j > 0; j--) {
+                    if(tiles[i][k-1].isEmpty()) {
+                        Tile2048 temp = tiles[i][k-1];
+                        tiles[i][k-1] = tiles[i][k];
+                        tiles[i][k] = temp;
+                        tiles[i][k-1].get
+                    }
+                    
+                }
+            }
+        }
     }
+    public void shiftRight() {
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k<4;k++) {
+                // tiles[i][k] =  
+            }
+        }
+    }
+     public void shiftUp() {
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k<4;k++) {
+                // tiles[i][k] =  
+            }
+        }
+    }
+    public void shiftDown() {
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k<4;k++) {
+                //  tiles[i][k] =  
+            }
+        }
+    }
+       
     
     public void playGame() {
         boolean gameOver = false;
