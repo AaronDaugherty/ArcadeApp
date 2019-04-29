@@ -4,13 +4,12 @@ import javafx.scene.image.Image;
 
 public class Tile2048 extends ImageView{
 
-    Image image;
     boolean empty;
     int number;
     int moveNumber;
 
     public Tile2048() {
-        image = new Image("2048/empty.png");
+        Image image = new Image("2048/empty.png");
         this.setImage(image);
         empty = true;
         number = 0;
@@ -60,9 +59,6 @@ public class Tile2048 extends ImageView{
         this.number = number;
     }
 
-    public void setImage(String image) {
-        this.image = new Image(image);
-        this.setImage(this.image);
-    }
+
 
 }

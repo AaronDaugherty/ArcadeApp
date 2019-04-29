@@ -53,10 +53,10 @@ public class Game2048 extends Group{
             int index = rand.nextInt(emptyImgs.size());
             int number = rand.nextInt(9);
             if(number > 0) {
-                emptyImgs.get(index).setImage("2048/2.png");
+                emptyImgs.get(index).setImage(new Image("2048/2.png"));
                 emptyImgs.get(index).setNumber(2);
             } else {
-                emptyImgs.get(index).setImage("2048/4.png");
+                emptyImgs.get(index).setImage(new Image("2048/4.png"));
                 emptyImgs.get(index).setNumber(4);
             }
 
@@ -70,7 +70,7 @@ public class Game2048 extends Group{
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
-                System.out.println("Left");
+                this.shiftLeft();
             } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                 System.out.println("Right");
             } else if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
@@ -94,7 +94,7 @@ public class Game2048 extends Group{
                         Tile2048 temp = tiles[i][k-1];
                         tiles[i][k-1] = tiles[i][k];
                         tiles[i][k] = temp;
-                        tiles[i][k-1].get
+                        System.out.println("AJFOJIAJFOIA");
                     }
                     
                 }
