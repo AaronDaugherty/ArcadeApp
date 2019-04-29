@@ -72,11 +72,11 @@ public class Game2048 extends Group{
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
                 this.shiftLeft();
             } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
-                System.out.println("Right");
+                this.shiftRight();
             } else if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
-                System.out.println("Up");
+                this.shiftUp();
             } else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
-                System.out.println("Down");
+                this.shiftDown();
             } else if (event.getCode() == KeyCode.M){
                 this.spawnTile();
             } else {
@@ -85,48 +85,66 @@ public class Game2048 extends Group{
         };
     }
 
+    public void setImages() {
+        for(int i = 0; i < 4; i++) {
+            for (int k = 0; k< 4; k++) {
+                tiles[i][k].setImage(new Image(tiles[i][k].getUrl()));
+            }
+        }
+    }
 
     public void shiftLeft() {
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4;k++) {
                 for(int j = k; j > 0; j--) {
                     if(tiles[i][j-1].isEmpty() && !tiles[i][j].isEmpty()) {
-                        Tile2048 temp = tiles[i][j-1];
-                        tiles[i][j-1] = tiles[i][j];
-                        tiles[i][j] = temp;
-                        System.out.println("AJFOJIAJFOIA");
+                        tiles[i][j].swap(tiles[i][j-1]);
                     }
                     
                 }
             }
         }
-        for(int i = 0; i < 4; i++) {
-            for(int k = 0; k < 4; k++) {
-                tiles[i][k].setImage(new Image("2048/"+tiles[i][k].getNumber()+".png));
-                System.out.println("2048/"+tiles[i][k].getNumber()+".png");
-            }
-        }
+
+        this.setImages();
     }
     public void shiftRight() {
         for(int i = 0; i < 4; i++) {
-            for(int k = 0; k<4;k++) {
-                // tiles[i][k] =  
+            for(int k = 3; k>-1;k--) {
+                for(int j = k; j < 3; j++) {
+                    if(tiles[i][j+1].isEmpty() && !tiles[i][j].isEmpty()) {
+                        tiles[i][j].swap(tiles[i][j+1]);
+                    }
+                    
+                }
             }
         }
+        this.setImages();
     }
      public void shiftUp() {
-        for(int i = 0; i < 4; i++) {
-            for(int k = 0; k<4;k++) {
-                // tiles[i][k] =  
+        for(int k = 0; k < 4; k++) {
+            for(int i = 0; i<4;i++) {
+                for(int j = i; j > 0; j--) {
+                    if(tiles[j-1][k].isEmpty() && !tiles[j][k].isEmpty()) {
+                        tiles[j][k].swap(tiles[j-1][k]);
+                    }
+                    
+                }
             }
         }
+        this.setImages();
     }
     public void shiftDown() {
-        for(int i = 0; i < 4; i++) {
-            for(int k = 0; k<4;k++) {
-                //  tiles[i][k] =  
+        for(int k = 0; k < 4; k++) {
+            for(int i = 3; i>-1;i--) {
+                for(int j = i; j < 3; j++) {
+                    if(tiles[j+1][k].isEmpty() && !tiles[j][k].isEmpty()) {
+                        tiles[j][k].swap(tiles[j+1][k]);
+                    }
+                    
+                }
             }
         }
+        this.setImages();
     }
 
 
