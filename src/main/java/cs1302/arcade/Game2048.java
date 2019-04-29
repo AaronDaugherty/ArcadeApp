@@ -94,57 +94,98 @@ public class Game2048 extends Group{
     }
 
     public void shiftLeft() {
+        int counter = 0;
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4;k++) {
                 for(int j = k; j > 0; j--) {
                     if(tiles[i][j-1].isEmpty() && !tiles[i][j].isEmpty()) {
                         tiles[i][j].swap(tiles[i][j-1]);
+                        counter++;
+                    }
+                    if(tiles[i][j-1].equals(tiles[i][j])) {
+                        tiles[i][j].merge(tiles[i][j-1]);
+                        counter++;
+                        break;
                     }
                     
                 }
             }
         }
+        if(counter > 0) {
+            this.spawnTile();
+            this.setImages();
+        }
 
-        this.setImages();
+>>>>>>> d4a69f41766d8c7e8703d2a304542e59bd3fcbaf
     }
     public void shiftRight() {
+        int counter = 0;
         for(int i = 0; i < 4; i++) {
             for(int k = 3; k>-1;k--) {
                 for(int j = k; j < 3; j++) {
                     if(tiles[i][j+1].isEmpty() && !tiles[i][j].isEmpty()) {
                         tiles[i][j].swap(tiles[i][j+1]);
+                        counter++;
+                    }
+                    if(tiles[i][j+1].equals(tiles[i][j])) {
+                        tiles[i][j].merge(tiles[i][j+1]);
+                        counter++;
+                        break;
                     }
                     
                 }
             }
         }
-        this.setImages();
+        if(counter > 0) {
+            this.setImages();
+            this.spawnTile();
+        }
     }
-     public void shiftUp() {
+    public void shiftUp() {
+        int counter = 0;
         for(int k = 0; k < 4; k++) {
             for(int i = 0; i<4;i++) {
                 for(int j = i; j > 0; j--) {
                     if(tiles[j-1][k].isEmpty() && !tiles[j][k].isEmpty()) {
                         tiles[j][k].swap(tiles[j-1][k]);
+                        counter++;
+                     }
+                    if(tiles[j][k].equals(tiles[j-1][k])) {
+                        tiles[j][k].merge(tiles[j-1][k]);
+                        counter++;
+                        break;
                     }
                     
                 }
             }
         }
-        this.setImages();
+        if(counter > 0) {
+            this.setImages();
+            this.spawnTile();
+        }
     }
     public void shiftDown() {
+        int counter = 0;
         for(int k = 0; k < 4; k++) {
             for(int i = 3; i>-1;i--) {
                 for(int j = i; j < 3; j++) {
                     if(tiles[j+1][k].isEmpty() && !tiles[j][k].isEmpty()) {
                         tiles[j][k].swap(tiles[j+1][k]);
+                        counter++;
                     }
-                    
+                    if(tiles[j][k].equals(tiles[j+1][k])) {
+                        tiles[j][k].merge(tiles[j+1][k]);
+                        counter++;
+                        break;
+                    }
                 }
             }
         }
-        this.setImages();
+        if(counter > 0) {
+            this.setImages();
+            this.spawnTile();
+        }
+        
     }
 
 
