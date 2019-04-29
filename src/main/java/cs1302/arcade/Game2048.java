@@ -90,14 +90,20 @@ public class Game2048 extends Group{
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4;k++) {
                 for(int j = k; j > 0; j--) {
-                    if(tiles[i][k-1].isEmpty()) {
-                        Tile2048 temp = tiles[i][k-1];
-                        tiles[i][k-1] = tiles[i][k];
-                        tiles[i][k] = temp;
+                    if(tiles[i][j-1].isEmpty() && !tiles[i][j].isEmpty()) {
+                        Tile2048 temp = tiles[i][j-1];
+                        tiles[i][j-1] = tiles[i][j];
+                        tiles[i][j] = temp;
                         System.out.println("AJFOJIAJFOIA");
                     }
                     
                 }
+            }
+        }
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k < 4; k++) {
+                tiles[i][k].setImage(new Image("2048/"+tiles[i][k].getNumber()+".png"));
+                System.out.println("2048/"+tiles[i][k].getNumber()+".png");
             }
         }
     }
