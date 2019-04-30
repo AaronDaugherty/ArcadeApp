@@ -114,19 +114,16 @@ public class Game2048 extends Group{
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4;k++) {
                 for(int j = k; j > 0; j--) {
-                    if(tiles[i][j].isEmpty()) {
-                        break;
-                    }
                     if(tiles[i][j-1].isEmpty() && !tiles[i][j].isEmpty()) {
                         tiles[i][j].swap(tiles[i][j-1]);
                         counter++;
-                    }
-                    if(this.canGoLeft(i,j)) {
-                        tiles[i][j].merge(tiles[i][j-1]);
-                        counter++;
+                    } else {
+                        if(this.canGoLeft(i,j)) {
+                            tiles[i][j].merge(tiles[i][j-1]);
+                            counter++;
+                        }
                         break;
                     }
-                    
                 }
             }
         }
@@ -146,19 +143,17 @@ public class Game2048 extends Group{
         for(int i = 0; i < 4; i++) {
             for(int k = 3; k>-1;k--) {
                 for(int j = k; j < 3; j++) {
-                    if(tiles[i][j].isEmpty()) {
-                        break;
-                    }
                     if(tiles[i][j+1].isEmpty() && !tiles[i][j].isEmpty()) {
                         tiles[i][j].swap(tiles[i][j+1]);
                         counter++;
                         
-                    }
-                    if(this.canGoRight(i,j)) {
-                        tiles[i][j].merge(tiles[i][j+1]);
-                        
-                        counter++;
+                    } else {
+                        if(this.canGoRight(i,j)) {
+                            tiles[i][j].merge(tiles[i][j+1]);
+                            counter++;
+                        }
                         break;
+                    
                     }
                     
                 }
@@ -180,18 +175,18 @@ public class Game2048 extends Group{
         for(int k = 0; k < 4; k++) {
             for(int i = 0; i<4;i++) {
                 for(int j = i; j > 0; j--) {
-                    if(tiles[j][k].isEmpty()) {
-                        break;
-                    }
                     if(tiles[j-1][k].isEmpty() && !tiles[j][k].isEmpty()) {
                         tiles[j][k].swap(tiles[j-1][k]);
                         counter++;
-                     }
-                    if(this.canGoUp(j,k)) {
-                        tiles[j][k].merge(tiles[j-1][k]);
-                        counter++;
+                    } else {
+                        if(this.canGoUp(j,k)) {
+                            tiles[j][k].merge(tiles[j-1][k]);
+                            counter++;   
+                        }
                         break;
                     }
+
+                        
                     
                 }
             }
@@ -212,17 +207,15 @@ public class Game2048 extends Group{
         for(int k = 0; k < 4; k++) {
             for(int i = 3; i>-1;i--) {
                 for(int j = i; j < 3; j++) {
-                    if(tiles[j][k].isEmpty()) {
-                        break;
-                    }
                     if(tiles[j+1][k].isEmpty() && !tiles[j][k].isEmpty()) {
                         tiles[j][k].swap(tiles[j+1][k]);
                         counter++;
-                    }
-                    if(this.canGoDown(j,k)) {
-                        tiles[j][k].merge(tiles[j+1][k]);
-                        counter++;
-                        System.out.println(counter);
+                    } else {
+                        if(this.canGoDown(j,k)) {
+                            tiles[j][k].merge(tiles[j+1][k]);
+                            counter++;
+                            System.out.println(counter);
+                        }
                         break;
                     }
                 }
