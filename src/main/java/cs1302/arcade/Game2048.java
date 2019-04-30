@@ -106,12 +106,13 @@ public class Game2048 extends Group{
         for(int i = 0; i < 4; i++) {
             for (int k = 0; k< 4; k++) {
                 tiles[i][k].setImage(new Image(tiles[i][k].getUrl()));
+                tiles[i][k].setMerged(false);
             }
         }
     }
 
     public boolean canGoLeft(int i, int j) {
-        if(j < 1 || tiles[i][j].isEmpty()) {
+        if(j < 1 || tiles[i][j].isEmpty() || tiles[i][j-1].hasMerged()) {
             return false;
         }
         return tiles[i][j-1].equals(tiles[i][j]);
@@ -129,6 +130,7 @@ public class Game2048 extends Group{
                         if(this.canGoLeft(i,j)) {
                             tiles[i][j].merge(tiles[i][j-1]);
                             counter++;
+                            tiles[i][j-1].setMerged(true);
                         }
                         break;
                     }
@@ -142,7 +144,7 @@ public class Game2048 extends Group{
 
     }
     public boolean canGoRight(int i, int j) {
-        if(j > 2 || tiles[i][j].isEmpty()) {
+        if(j > 2 || tiles[i][j].isEmpty() || tiles[i][j+1].hasMerged()) {
             return false;
         }
         return tiles[i][j+1].equals(tiles[i][j]);
@@ -161,6 +163,7 @@ public class Game2048 extends Group{
                         if(this.canGoRight(i,j)) {
                             tiles[i][j].merge(tiles[i][j+1]);
                             counter++;
+                            tiles[i][j+1].setMerged(true);
                         }
                         break;
                     
@@ -175,7 +178,7 @@ public class Game2048 extends Group{
         }
     }
     public boolean canGoUp(int j, int k) {
-        if(j < 1 || tiles[j][k].isEmpty()) {
+        if(j < 1 || tiles[j][k].isEmpty() || tiles[j-1][k].hasMerged()) {
             return false;
         }
         return tiles[j][k].equals(tiles[j-1][k]);
@@ -191,7 +194,8 @@ public class Game2048 extends Group{
                     } else {
                         if(this.canGoUp(j,k)) {
                             tiles[j][k].merge(tiles[j-1][k]);
-                            counter++;   
+                            counter++;
+                            tiles[j-1][k].setMerged(true);
                         }
                         break;
                     }
@@ -207,7 +211,7 @@ public class Game2048 extends Group{
         }
     }
     public boolean canGoDown(int j, int k) {
-        if(j > 2 || tiles[j][k].isEmpty()) {
+        if(j > 2 || tiles[j][k].isEmpty() || tiles[j+1][k].hasMerged()) {
             return false;
         }
         return tiles[j][k].equals(tiles[j+1][k]);
@@ -225,6 +229,7 @@ public class Game2048 extends Group{
                             tiles[j][k].merge(tiles[j+1][k]);
                             counter++;
                             System.out.println(counter);
+                            tiles[j+1][k].setMerged(true);
                         }
                         break;
                     }

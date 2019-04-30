@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 
 public class Tile2048 extends ImageView{
 
+    boolean hasMerged;
     boolean empty;
     int number;
 
@@ -12,6 +13,7 @@ public class Tile2048 extends ImageView{
         this.setImage(image);
         empty = true;
         number = 0;
+        hasMerged = false;
     }
 
     public void swap(Tile2048 tile) {
@@ -54,6 +56,14 @@ public class Tile2048 extends ImageView{
         tile.setNumber(tile.getNumber() *2);
         this.setNumber(0);
         this.setEmpty(true);
+    }
+
+    public void setMerged(boolean hasMerged) {
+        this.hasMerged = hasMerged;
+    }
+
+    public boolean hasMerged() {
+        return hasMerged;
     }
 
 
