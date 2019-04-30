@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 public class Game2048 extends Group{
 
     TilePane pane;
@@ -20,9 +21,12 @@ public class Game2048 extends Group{
     VBox vbox;
     HBox hbox;
     Random rand;
+    Button ngButton;
+    int score;
     
     public Game2048(ArcadeApp application) {
         this.application = application;
+        score = 0;
         vbox = new VBox();
         hbox = new HBox();
         pane = new TilePane();
@@ -38,14 +42,18 @@ public class Game2048 extends Group{
         tiles = new Tile2048[4][4];
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
-                tiles[i][k] = new Tile2048();
+                tiles[i][k] = new Tile2048(this);
                 pane.getChildren().add(tiles[i][k]);
             }
         }
         this.setOnKeyPressed(createKeyHandler());
         vbox.setAlignment(Pos.CENTER);
-        this.getChildren().add(vbox);
         rand = new Random();
+        ngButton = new Button("New Game");
+        ngButton.setOnAction(e->this.newGame());
+        ngButton.setTranslateX(180+560);
+        ngButton.setTranslateY(50);
+        this.getChildren().addAll(vbox , ngButton);
         this.newGame();
     }
 
@@ -58,6 +66,7 @@ public class Game2048 extends Group{
         }
         spawnTile();
         spawnTile();
+        this.setImages();
     }
     
     public void spawnTile() {
@@ -80,7 +89,8 @@ public class Game2048 extends Group{
                 emptyImgs.get(index).setNumber(4);
             }
             emptyImgs.get(index).setEmpty(false);                                            
-        } 
+        }
+        System.out.println(this.getScore());
     }
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
@@ -268,6 +278,14 @@ public class Game2048 extends Group{
 
     public void gameOver() {
         System.out.println("Game Over");
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     

@@ -7,13 +7,15 @@ public class Tile2048 extends ImageView{
     boolean hasMerged;
     boolean empty;
     int number;
+    Game2048 game;
 
-    public Tile2048() {
+    public Tile2048(Game2048 game) {
         Image image = new Image("2048/0.png");
         this.setImage(image);
         empty = true;
         number = 0;
         hasMerged = false;
+        this.game = game;
     }
 
     public void swap(Tile2048 tile) {
@@ -56,6 +58,7 @@ public class Tile2048 extends ImageView{
         tile.setNumber(tile.getNumber() *2);
         this.setNumber(0);
         this.setEmpty(true);
+        game.setScore(game.getScore() + tile.getNumber());
     }
 
     public void setMerged(boolean hasMerged) {
