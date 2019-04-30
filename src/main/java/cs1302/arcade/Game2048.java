@@ -2,6 +2,7 @@ package cs1302.arcade;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -20,6 +21,7 @@ public class Game2048 extends Group{
     ArcadeApp application;
     VBox vbox;
     HBox hbox;
+    StackPane stackpane;
     Random rand;
     Button ngButton;
     int score;
@@ -27,6 +29,7 @@ public class Game2048 extends Group{
     public Game2048(ArcadeApp application) {
         this.application = application;
         score = 0;
+        stackpane = new StackPane();
         vbox = new VBox();
         hbox = new HBox();
         pane = new TilePane();
@@ -37,8 +40,8 @@ public class Game2048 extends Group{
         pane.setMaxSize(560, 560);
         hbox.getChildren().add(pane);
         pane.setTranslateX(232);
-        pane.setTranslateY(104);
-        vbox.getChildren().add(hbox);
+        // pane.setTranslateY(104);
+        
         tiles = new Tile2048[4][4];
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
@@ -50,10 +53,13 @@ public class Game2048 extends Group{
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
         ngButton = new Button("New Game");
+        vbox.getChildren().addAll(ngButton,hbox);
         ngButton.setOnAction(e->this.newGame());
-        ngButton.setTranslateX(180+560);
-        ngButton.setTranslateY(50);
-        this.getChildren().addAll(vbox , ngButton);
+        //ngButton.setTranslateX();
+        // ngButton.setTranslateY(50);
+        ImageView background = new ImageView(new Image("2048/GameBackground.png"));
+        stackpane.getChildren().addAll(background,vbox); 
+        this.getChildren().addAll(stackpane);
         this.newGame();
     }
 
