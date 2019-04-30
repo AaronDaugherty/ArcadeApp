@@ -9,7 +9,7 @@ public class Tile2048 extends ImageView{
     int number;
 
     public Tile2048() {
-        Image image = new Image("2048/empty.png");
+        Image image = new Image("2048/0.png");
         this.setImage(image);
         empty = true;
         number = 0;
