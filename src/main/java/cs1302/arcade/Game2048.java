@@ -46,8 +46,20 @@ public class Game2048 extends Group{
         vbox.setAlignment(Pos.CENTER);
         this.getChildren().add(vbox);
         rand = new Random();
+        this.newGame();
     }
-        
+
+    public void newGame() {
+        for(int i=0;i<4;i++) {
+            for(int k=0;k<4;k++) {
+                tiles[i][k].setEmpty(true);
+                tiles[i][k].setNumber(0);
+            }
+        }
+        spawnTile();
+        spawnTile();
+    }
+    
     public void spawnTile() {
         ArrayList<Tile2048> emptyImgs = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
@@ -67,12 +79,8 @@ public class Game2048 extends Group{
                 emptyImgs.get(index).setImage(new Image("2048/4.png"));
                 emptyImgs.get(index).setNumber(4);
             }
-
             emptyImgs.get(index).setEmpty(false);                                            
-
-        } else {
-            this.gameOver();
-        }
+        } 
     }
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
@@ -85,10 +93,11 @@ public class Game2048 extends Group{
                 this.shiftUp();
             } else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
                 this.shiftDown();
-            } else if (event.getCode() == KeyCode.M){
-                this.spawnTile();
             } else {
                 System.out.println(event);
+            }
+            if(this.isFull() && this.isGameOver()) {
+                this.gameOver();
             }
         };
     }
@@ -101,16 +110,26 @@ public class Game2048 extends Group{
         }
     }
 
+    public boolean canGoLeft(int i, int j) {
+        if(j < 1 || tiles[i][j].isEmpty()) {
+            return false;
+        }
+        return tiles[i][j-1].equals(tiles[i][j]);
+    }
+    
     public void shiftLeft() {
         int counter = 0;
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4;k++) {
                 for(int j = k; j > 0; j--) {
+                    if(tiles[i][j].isEmpty()) {
+                        break;
+                    }
                     if(tiles[i][j-1].isEmpty() && !tiles[i][j].isEmpty()) {
                         tiles[i][j].swap(tiles[i][j-1]);
                         counter++;
                     }
-                    if(tiles[i][j-1].equals(tiles[i][j])) {
+                    if(this.canGoLeft(i,j)) {
                         tiles[i][j].merge(tiles[i][j-1]);
                         counter++;
                         break;
@@ -123,18 +142,31 @@ public class Game2048 extends Group{
             this.spawnTile();
             this.setImages();
         }
+
+    }
+    public boolean canGoRight(int i, int j) {
+        if(j > 2 || tiles[i][j].isEmpty()) {
+            return false;
+        }
+        return tiles[i][j+1].equals(tiles[i][j]);
+
     }
     public void shiftRight() {
         int counter = 0;
         for(int i = 0; i < 4; i++) {
             for(int k = 3; k>-1;k--) {
                 for(int j = k; j < 3; j++) {
+                    if(tiles[i][j].isEmpty()) {
+                        break;
+                    }
                     if(tiles[i][j+1].isEmpty() && !tiles[i][j].isEmpty()) {
                         tiles[i][j].swap(tiles[i][j+1]);
                         counter++;
+                        
                     }
-                    if(tiles[i][j+1].equals(tiles[i][j])) {
+                    if(this.canGoRight(i,j)) {
                         tiles[i][j].merge(tiles[i][j+1]);
+                        
                         counter++;
                         break;
                     }
@@ -147,16 +179,25 @@ public class Game2048 extends Group{
             this.spawnTile();
         }
     }
+    public boolean canGoUp(int j, int k) {
+        if(j < 1 || tiles[j][k].isEmpty()) {
+            return false;
+        }
+        return tiles[j][k].equals(tiles[j-1][k]);
+    }
     public void shiftUp() {
         int counter = 0;
         for(int k = 0; k < 4; k++) {
             for(int i = 0; i<4;i++) {
                 for(int j = i; j > 0; j--) {
+                    if(tiles[j][k].isEmpty()) {
+                        break;
+                    }
                     if(tiles[j-1][k].isEmpty() && !tiles[j][k].isEmpty()) {
                         tiles[j][k].swap(tiles[j-1][k]);
                         counter++;
                      }
-                    if(tiles[j][k].equals(tiles[j-1][k])) {
+                    if(this.canGoUp(j,k)) {
                         tiles[j][k].merge(tiles[j-1][k]);
                         counter++;
                         break;
@@ -170,18 +211,28 @@ public class Game2048 extends Group{
             this.spawnTile();
         }
     }
+    public boolean canGoDown(int j, int k) {
+        if(j > 2 || tiles[j][k].isEmpty()) {
+            return false;
+        }
+        return tiles[j][k].equals(tiles[j+1][k]);
+    }
     public void shiftDown() {
         int counter = 0;
         for(int k = 0; k < 4; k++) {
             for(int i = 3; i>-1;i--) {
                 for(int j = i; j < 3; j++) {
+                    if(tiles[j][k].isEmpty()) {
+                        break;
+                    }
                     if(tiles[j+1][k].isEmpty() && !tiles[j][k].isEmpty()) {
                         tiles[j][k].swap(tiles[j+1][k]);
                         counter++;
                     }
-                    if(tiles[j][k].equals(tiles[j+1][k])) {
+                    if(this.canGoDown(j,k)) {
                         tiles[j][k].merge(tiles[j+1][k]);
                         counter++;
+                        System.out.println(counter);
                         break;
                     }
                 }
@@ -194,15 +245,28 @@ public class Game2048 extends Group{
         
     }
 
-
-    
-    public void playGame() {
-        boolean gameOver = false;
-        while(!gameOver) {
-            this.requestFocus();
+    public boolean isFull() {
+        for(int i =0; i < 4; i++) {
+            for(int k = 0; k < 4; k++) {
+                if(tiles[i][k].isEmpty()) {
+                    return false;
+                }
+            }
         }
-
+        return true;
     }
+    
+    public boolean isGameOver() {
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k < 4; k++) {
+                if(this.canGoLeft(i,k) || this.canGoRight(i,k) ||
+                   this.canGoUp(i,k) || this.canGoDown(i,k))
+                    return false;
+            }
+        }
+        return true;
+    }
+    
 
     public void gameOver() {
         System.out.println("Game Over");
