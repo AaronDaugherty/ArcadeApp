@@ -59,7 +59,7 @@ public class ArcadeApp extends Application {
 
         sp2048.getChildren().add(bnt2048);
         sp2048.setAlignment(bnt2048,Pos.BOTTOM_CENTER);
-        bnt2048.setTranslateY(-15);
+        bnt2048.setTranslateY(-40);
         
 
         //Creating Space Invaders box
@@ -78,7 +78,6 @@ public class ArcadeApp extends Application {
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
-        stage.setFullScreen(true);
         stage.setResizable(false);
         stage.show();
         

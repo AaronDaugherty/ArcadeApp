@@ -1,5 +1,6 @@
 package cs1302.arcade;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.image.ImageView;
 import javafx.scene.Scene;
@@ -10,24 +11,30 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.Group;
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.geometry.Pos;
 public class Game2048 extends Group{
 
     TilePane pane;
     Tile2048[][] tiles;
     ArcadeApp application;
     VBox vbox;
+    HBox hbox;
     Random rand;
     
     public Game2048(ArcadeApp application) {
         this.application = application;
         vbox = new VBox();
+        hbox = new HBox();
         pane = new TilePane();
         pane.setHgap(8);
         pane.setVgap(8);
         pane.setPrefColumns(4);
         pane.setPrefRows(4);
         pane.setMaxSize(560, 560);
-        vbox.getChildren().add(pane);
+        hbox.getChildren().add(pane);
+        pane.setTranslateX(232);
+        pane.setTranslateY(104);
+        vbox.getChildren().add(hbox);
         tiles = new Tile2048[4][4];
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
@@ -36,6 +43,7 @@ public class Game2048 extends Group{
             }
         }
         this.setOnKeyPressed(createKeyHandler());
+        vbox.setAlignment(Pos.CENTER);
         this.getChildren().add(vbox);
         rand = new Random();
         this.newGame();
@@ -131,12 +139,14 @@ public class Game2048 extends Group{
             this.spawnTile();
             this.setImages();
         }
+
     }
     public boolean canGoRight(int i, int j) {
         if(j > 2 || tiles[i][j].isEmpty()) {
             return false;
         }
         return tiles[i][j+1].equals(tiles[i][j]);
+
     }
     public void shiftRight() {
         int counter = 0;
