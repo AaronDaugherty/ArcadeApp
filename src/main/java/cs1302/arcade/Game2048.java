@@ -64,6 +64,8 @@ public class Game2048 extends Group{
         ImageView newGame = new ImageView(new Image("2048/NewGame.png"));
         ImageView mainMenu = new ImageView(new Image("2048/MainMenu.png"));
         mmButton.setGraphic(mainMenu);
+        mmButton.setTranslateX(-300);
+        mmButton.setTranslateY(25);
         ngButton.setGraphic(newGame);
         ngButton.setPadding(Insets.EMPTY);
         mmButton.setOnAction(e -> application.setScene(application.getScene()));
