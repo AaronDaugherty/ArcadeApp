@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
 public class Game2048 extends Group{
 
     TilePane pane;
@@ -25,7 +27,10 @@ public class Game2048 extends Group{
     Random rand;
     Button ngButton;
     int score;
-    
+    Text scoreText;
+    Text scoreNumText;
+    VBox scorevbox;
+    Button mmButton;
     public Game2048(ArcadeApp application) {
         this.application = application;
         score = 0;
@@ -40,8 +45,6 @@ public class Game2048 extends Group{
         pane.setMaxSize(560, 560);
         hbox.getChildren().add(pane);
         pane.setTranslateX(232);
-        // pane.setTranslateY(104);
-        
         tiles = new Tile2048[4][4];
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
@@ -53,14 +56,27 @@ public class Game2048 extends Group{
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
         ngButton = new Button("New Game");
-        vbox.getChildren().addAll(ngButton,hbox);
+        mmButton = new Button("Main Menu");
+        mmButton.setOnAction(e -> application.setScene(application.getScene()));
+        scoreText = new Text("Score");
+        scoreNumText = new Text("0");
+        scoreText.setFont(new Font("System Bold",24));
+        scoreNumText.setFont(new Font("System Bold",24));
+        scorevbox = new VBox();
+        scorevbox.getChildren().addAll(scoreText, scoreNumText);
+        scorevbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
+        scorevbox.setTranslateX(230);
         ngButton.setOnAction(e->this.newGame());
-        //ngButton.setTranslateX();
-        // ngButton.setTranslateY(50);
+
         ImageView background = new ImageView(new Image("2048/GameBackground.png"));
         stackpane.getChildren().addAll(background,vbox); 
         this.getChildren().addAll(stackpane);
+
+
+        
         this.newGame();
+
     }
 
     public void newGame() {
@@ -73,6 +89,7 @@ public class Game2048 extends Group{
         spawnTile();
         spawnTile();
         this.setImages();
+        this.setScore(0);
     }
     
     public void spawnTile() {
@@ -96,7 +113,6 @@ public class Game2048 extends Group{
             }
             emptyImgs.get(index).setEmpty(false);                                            
         }
-        System.out.println(this.getScore());
     }
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
@@ -244,7 +260,6 @@ public class Game2048 extends Group{
                         if(this.canGoDown(j,k)) {
                             tiles[j][k].merge(tiles[j+1][k]);
                             counter++;
-                            System.out.println(counter);
                             tiles[j+1][k].setMerged(true);
                         }
                         break;
@@ -288,6 +303,7 @@ public class Game2048 extends Group{
 
     public void setScore(int score) {
         this.score = score;
+        this.scoreNumText.setText(Integer.toString(score));
     }
 
     public int getScore() {
