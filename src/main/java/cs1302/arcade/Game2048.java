@@ -16,6 +16,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.geometry.Insets;
+
 public class Game2048 extends Group{
 
     TilePane pane;
@@ -31,6 +33,7 @@ public class Game2048 extends Group{
     Text scoreNumText;
     VBox scorevbox;
     Button mmButton;
+    
     public Game2048(ArcadeApp application) {
         this.application = application;
         score = 0;
@@ -56,7 +59,10 @@ public class Game2048 extends Group{
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
         ngButton = new Button("New Game");
-        mmButton = new Button("Main Menu");
+        mmButton = new Button();
+        mmButton.setPadding(Insets.EMPTY);
+        ImageView mainMenu = new ImageView(new Image("2048/MainMenu.png"));
+        mmButton.setGraphic(mainMenu);
         mmButton.setOnAction(e -> application.setScene(application.getScene()));
         scoreText = new Text("Score");
         scoreNumText = new Text("0");
