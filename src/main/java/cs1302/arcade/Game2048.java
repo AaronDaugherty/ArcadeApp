@@ -90,7 +90,7 @@ public class Game2048 extends Group{
         scorevbox = new VBox();
         scorevbox.getChildren().addAll(scoreText, scoreNumText);
         scorevbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(ngButton,mmButton,scorevbox,hbox);
+        vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
         scorevbox.setTranslateX(230);
         ngButton.setOnAction(e->this.newGame());
         gameOver.setOpacity(0);
