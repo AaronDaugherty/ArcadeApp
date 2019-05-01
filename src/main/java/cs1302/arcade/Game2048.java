@@ -60,11 +60,16 @@ public class Game2048 extends Group{
         this.setOnKeyPressed(createKeyHandler());
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
-        ngButton = new Button("New Game");
+        ngButton = new Button();
         mmButton = new Button();
         mmButton.setPadding(Insets.EMPTY);
+        ImageView newGame = new ImageView(new Image("2048/NewGame.png"));
         ImageView mainMenu = new ImageView(new Image("2048/MainMenu.png"));
         mmButton.setGraphic(mainMenu);
+        mmButton.setTranslateX(-300);
+        mmButton.setTranslateY(25);
+        ngButton.setGraphic(newGame);
+        ngButton.setPadding(Insets.EMPTY);
         mmButton.setOnAction(e -> application.setScene(application.getScene()));
         scoreText = new Text("Score");
         scoreNumText = new Text("0");
