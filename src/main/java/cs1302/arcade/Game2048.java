@@ -17,7 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.geometry.Insets;
-
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 public class Game2048 extends Group{
 
     TilePane pane;
@@ -31,6 +32,7 @@ public class Game2048 extends Group{
     int score;
     Text scoreText;
     Text scoreNumText;
+    Text gameOver;
     VBox scorevbox;
     Button mmButton;
     
@@ -66,17 +68,29 @@ public class Game2048 extends Group{
         mmButton.setOnAction(e -> application.setScene(application.getScene()));
         scoreText = new Text("Score");
         scoreNumText = new Text("0");
-        scoreText.setFont(new Font("System Bold",24));
-        scoreNumText.setFont(new Font("System Bold",24));
+        gameOver = new Text("Game Over");
+        try {
+            String path = "src/main/resources/2048/JFWilwod.ttf";
+            FileInputStream fp = new FileInputStream(path);
+            FileInputStream fp2 = new FileInputStream(path);
+            scoreText.setFont(Font.loadFont(fp,24));
+            scoreNumText.setFont(new Font("System Bold", 24));
+            gameOver.setFont(Font.loadFont(fp2,144));
+            
+        } catch(Exception e) {
+            e.printStackTrace();
+            scoreText.setFont(new Font("System Bold",24));
+            gameOver.setFont(Font.loadFont("System Bold", 144));
+        }
         scorevbox = new VBox();
         scorevbox.getChildren().addAll(scoreText, scoreNumText);
         scorevbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
+        vbox.getChildren().addAll(ngButton,mmButton,scorevbox,hbox);
         scorevbox.setTranslateX(230);
         ngButton.setOnAction(e->this.newGame());
-
+        gameOver.setOpacity(0);
         ImageView background = new ImageView(new Image("2048/GameBackground.png"));
-        stackpane.getChildren().addAll(background,vbox); 
+        stackpane.getChildren().addAll(background,vbox,gameOver); 
         this.getChildren().addAll(stackpane);
 
 
@@ -92,6 +106,7 @@ public class Game2048 extends Group{
                 tiles[i][k].setNumber(0);
             }
         }
+        gameOver.setOpacity(0);
         spawnTile();
         spawnTile();
         this.setImages();
@@ -304,7 +319,7 @@ public class Game2048 extends Group{
     
 
     public void gameOver() {
-        System.out.println("Game Over");
+        gameOver.setOpacity(1);
     }
 
     public void setScore(int score) {
