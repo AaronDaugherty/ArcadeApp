@@ -78,6 +78,7 @@ public class ArcadeApp extends Application {
         group.getChildren().add(vbox);
         
         scene = new Scene(group, 1024, 768);
+        scene.getStylesheets().add("src/main/java/cs1302/arcade/ButtonStyle.css");
         Scene scene2048 = new Scene(game2048, 1024, 768);
         bnt2048.setOnMouseClicked(e ->  {
                 stage.setScene(scene2048);
