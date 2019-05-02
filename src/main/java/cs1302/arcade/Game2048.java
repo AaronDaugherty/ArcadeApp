@@ -19,6 +19,8 @@ import javafx.scene.text.Font;
 import javafx.geometry.Insets;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
+import javafx.scene.paint.Color;
+import javafx.scene.effect.ColorInput;
 public class Game2048 extends Group{
 
     TilePane pane;
@@ -35,6 +37,8 @@ public class Game2048 extends Group{
     Text gameOver;
     VBox scorevbox;
     ArcButton mmButton;
+    ImageView background;
+    ImageView GOBackground;
     
     public Game2048(ArcadeApp application) {
         this.application = application;
@@ -52,8 +56,8 @@ public class Game2048 extends Group{
         this.setUpScoreAndGameOver();
         vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
         ngButton.setOnAction(e->this.newGame());
-        ImageView background = new ImageView(new Image("2048/GameBackground.png"));
-        stackpane.getChildren().addAll(background,vbox,gameOver); 
+        background = new ImageView(new Image("2048/GameBackground.png"));
+        stackpane.getChildren().addAll(background,vbox,GOBackground, gameOver); 
         this.getChildren().addAll(stackpane);
         this.newGame();
     }
@@ -62,6 +66,9 @@ public class Game2048 extends Group{
         scoreText = new Text("Score");
         scoreNumText = new Text("0");
         gameOver = new Text("Game Over");
+        scoreText.setFill(Color.rgb(10,71,18));
+        scoreNumText.setFill(Color.rgb(10,71,18));
+        gameOver.setFill(Color.rgb(10,71,18));
         gameOver.setOpacity(0);
         try {
             String path = "src/main/resources/2048/JFWilwod.ttf";
@@ -79,6 +86,9 @@ public class Game2048 extends Group{
         scorevbox.getChildren().addAll(scoreText, scoreNumText);
         scorevbox.setAlignment(Pos.CENTER);
         scorevbox.setTranslateX(230);
+        GOBackground = new ImageView(new Image("2048/GOB.jpg"));
+        GOBackground.setOpacity(0);
+        GOBackground.setMouseTransparent(true);
     }
 
     public void setUpPane() {
@@ -108,6 +118,7 @@ public class Game2048 extends Group{
             }
         }
         gameOver.setOpacity(0);
+        GOBackground.setOpacity(0);
         spawnTile();
         spawnTile();
         this.setImages();
@@ -321,6 +332,7 @@ public class Game2048 extends Group{
 
     public void gameOver() {
         gameOver.setOpacity(1);
+        GOBackground.setOpacity(.5);
     }
 
     public void setScore(int score) {
