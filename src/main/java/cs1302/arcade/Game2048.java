@@ -34,46 +34,35 @@ public class Game2048 extends Group{
     Text scoreNumText;
     Text gameOver;
     VBox scorevbox;
-    Button mmButton;
+    ArcButton mmButton;
     
     public Game2048(ArcadeApp application) {
         this.application = application;
         score = 0;
         stackpane = new StackPane();
         vbox = new VBox();
-        hbox = new HBox();
-        pane = new TilePane();
-        pane.setHgap(8);
-        pane.setVgap(8);
-        pane.setPrefColumns(4);
-        pane.setPrefRows(4);
-        pane.setMaxSize(560, 560);
-        hbox.getChildren().add(pane);
-        pane.setTranslateX(232);
-        tiles = new Tile2048[4][4];
-        for(int i = 0; i < 4; i++) {
-            for(int k = 0; k < 4; k++) {
-                tiles[i][k] = new Tile2048(this);
-                pane.getChildren().add(tiles[i][k]);
-            }
-        }
+        this.setUpPane();
         this.setOnKeyPressed(createKeyHandler());
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
-        ngButton = new Button();
-        mmButton = new Button();
-        mmButton.setPadding(Insets.EMPTY);
-        ImageView newGame = new ImageView(new Image("2048/NewGame.png"));
-        ImageView mainMenu = new ImageView(new Image("2048/MainMenu.png"));
-        mmButton.setGraphic(mainMenu);
-        mmButton.setTranslateX(-300);
-        mmButton.setTranslateY(25);
-        ngButton.setGraphic(newGame);
-        ngButton.setPadding(Insets.EMPTY);
-        mmButton.setOnAction(e -> application.setScene(application.getScene()));
+        mmButton = new ArcButton(-300, 25,new Image("2048/MainMenu.png"),
+                                 e -> application.setScene(application.getScene()));
+        ngButton = new ArcButton(0,0,new Image("2048/NewGame.png"),
+                                 e -> this.newGame());
+        this.setUpScoreAndGameOver();
+        vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
+        ngButton.setOnAction(e->this.newGame());
+        ImageView background = new ImageView(new Image("2048/GameBackground.png"));
+        stackpane.getChildren().addAll(background,vbox,gameOver); 
+        this.getChildren().addAll(stackpane);
+        this.newGame();
+    }
+
+    public void setUpScoreAndGameOver() {
         scoreText = new Text("Score");
         scoreNumText = new Text("0");
         gameOver = new Text("Game Over");
+        gameOver.setOpacity(0);
         try {
             String path = "src/main/resources/2048/JFWilwod.ttf";
             FileInputStream fp = new FileInputStream(path);
@@ -83,25 +72,32 @@ public class Game2048 extends Group{
             gameOver.setFont(Font.loadFont(fp2,144));
             
         } catch(Exception e) {
-            e.printStackTrace();
             scoreText.setFont(new Font("System Bold",24));
             gameOver.setFont(Font.loadFont("System Bold", 144));
         }
         scorevbox = new VBox();
         scorevbox.getChildren().addAll(scoreText, scoreNumText);
         scorevbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
         scorevbox.setTranslateX(230);
-        ngButton.setOnAction(e->this.newGame());
-        gameOver.setOpacity(0);
-        ImageView background = new ImageView(new Image("2048/GameBackground.png"));
-        stackpane.getChildren().addAll(background,vbox,gameOver); 
-        this.getChildren().addAll(stackpane);
+    }
 
-
-        
-        this.newGame();
-
+    public void setUpPane() {
+        hbox = new HBox();
+        pane = new TilePane();
+        hbox.getChildren().add(pane);
+        pane.setHgap(8);
+        pane.setVgap(8);
+        pane.setPrefColumns(4);
+        pane.setPrefRows(4);
+        pane.setMaxSize(560, 560);
+        pane.setTranslateX(232);
+        tiles = new Tile2048[4][4];
+        for(int i = 0; i < 4; i++) {
+            for(int k = 0; k < 4; k++) {
+                tiles[i][k] = new Tile2048(this);
+                pane.getChildren().add(tiles[i][k]);
+            }
+        }
     }
 
     public void newGame() {
