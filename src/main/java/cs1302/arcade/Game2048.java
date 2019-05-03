@@ -69,7 +69,7 @@ public class Game2048 extends Group{
         gameOver = new Text("Game Over");
         scoreText.setFill(Color.rgb(10,71,18));
         scoreNumText.setFill(Color.rgb(10,71,18));
-        gameOver.setFill(Color.rgb(10,71,18));
+        gameOver.setFill(Color.rgb(0,0,0));
         gameOver.setOpacity(0);
         win = new Text("You Win!");
         win.setFill(Color.rgb(10,71,18));
