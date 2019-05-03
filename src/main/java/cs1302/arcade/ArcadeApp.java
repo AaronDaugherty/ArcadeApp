@@ -53,7 +53,8 @@ public class ArcadeApp extends Application {
         VBox vbox = new VBox();
         Button bnt2048 = new Button();
         Game2048 game2048 = new Game2048(this);
-        
+        GameSI gameSI = new GameSI(this);
+        Button bntSI = new Button();
         
         //Creating 2048 box
         ImageView start2048nm = new ImageView(new Image("2048/2048GreyStart.png"));
@@ -72,6 +73,7 @@ public class ArcadeApp extends Application {
 
         //Creating Space Invaders box
         spInvaders.getChildren().add(new ImageView(new Image("spaceInv/siBackground.jpg")));
+        spInvaders.getChildren().add(bntSI);
 
         group.setOnMouseClicked(createMouseHandler());
         vbox.getChildren().addAll(sp2048, spInvaders);
@@ -80,9 +82,15 @@ public class ArcadeApp extends Application {
         scene = new Scene(group, 1024, 768);
         scene.getStylesheets().add("src/main/java/cs1302/arcade/ButtonStyle.css");
         Scene scene2048 = new Scene(game2048, 1024, 768);
+        Scene sceneSI = new Scene(gameSI, 1024, 768);
         bnt2048.setOnMouseClicked(e ->  {
                 stage.setScene(scene2048);
                 game2048.requestFocus();
+            });
+
+        bntSI.setOnMouseClicked( e -> {
+                stage.setScene(sceneSI);
+                gameSI.requestFocus();
             });
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
