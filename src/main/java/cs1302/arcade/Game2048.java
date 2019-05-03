@@ -40,8 +40,10 @@ public class Game2048 extends Group{
     ArcButton mmButton;
     ImageView background;
     ImageView GOBackground;
+    boolean isWin;
     
     public Game2048(ArcadeApp application) {
+        isWin = false;
         this.application = application;
         score = 0;
         stackpane = new StackPane();
@@ -131,6 +133,7 @@ public class Game2048 extends Group{
         spawnTile();
         this.setImages();
         this.setScore(0);
+        isWin = false;
     }
     
     public void spawnTile() {
@@ -158,7 +161,9 @@ public class Game2048 extends Group{
 
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
-            if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
+            if(isWin) {
+
+            } else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
                 this.shiftLeft();
             } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                 this.shiftRight();
@@ -166,8 +171,11 @@ public class Game2048 extends Group{
                 this.shiftUp();
             } else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
                 this.shiftDown();
-            } else {
-                System.out.println(event);
+            } else if (event.getCode() == KeyCode.M) {
+                tiles[0][0].setNumber(2048);
+                tiles[0][0].setEmpty(false);
+                this.setImages();
+                
             }
             if(this.isFull() && this.isGameOver()) {
                 this.gameOver();
@@ -178,6 +186,7 @@ public class Game2048 extends Group{
     public void win() {
         GOBackground.setOpacity(.5);
         win.setOpacity(1);
+        isWin = true;
     }
 
     public void setImages() {
