@@ -35,6 +35,7 @@ public class Game2048 extends Group{
     Text scoreText;
     Text scoreNumText;
     Text gameOver;
+    Text win;
     VBox scorevbox;
     ArcButton mmButton;
     ImageView background;
@@ -57,7 +58,7 @@ public class Game2048 extends Group{
         vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
         ngButton.setOnAction(e->this.newGame());
         background = new ImageView(new Image("2048/GameBackground.png"));
-        stackpane.getChildren().addAll(background,vbox,GOBackground, gameOver); 
+        stackpane.getChildren().addAll(background,vbox,GOBackground, gameOver, win); 
         this.getChildren().addAll(stackpane);
         this.newGame();
     }
@@ -70,15 +71,21 @@ public class Game2048 extends Group{
         scoreNumText.setFill(Color.rgb(10,71,18));
         gameOver.setFill(Color.rgb(10,71,18));
         gameOver.setOpacity(0);
+        win = new Text("You Win!");
+        win.setFill(Color.rgb(10,71,18));
+        win.setOpacity(0);
         try {
             String path = "src/main/resources/2048/JFWilwod.ttf";
             FileInputStream fp = new FileInputStream(path);
             FileInputStream fp2 = new FileInputStream(path);
+            FileInputStream fp3 = new FileInputStream(path);
             scoreText.setFont(Font.loadFont(fp,24));
             scoreNumText.setFont(new Font("System Bold", 24));
             gameOver.setFont(Font.loadFont(fp2,144));
+            win.setFont(Font.loadFont(fp3,144));
             
         } catch(Exception e) {
+            scoreNumText.setFont(new Font("System Bold", 24));
             scoreText.setFont(new Font("System Bold",24));
             gameOver.setFont(Font.loadFont("System Bold", 144));
         }
@@ -119,6 +126,7 @@ public class Game2048 extends Group{
         }
         gameOver.setOpacity(0);
         GOBackground.setOpacity(0);
+        win.setOpacity(0);
         spawnTile();
         spawnTile();
         this.setImages();
@@ -165,6 +173,11 @@ public class Game2048 extends Group{
                 this.gameOver();
             }
         };
+    }
+
+    public void win() {
+        GOBackground.setOpacity(.5);
+        win.setOpacity(1);
     }
 
     public void setImages() {

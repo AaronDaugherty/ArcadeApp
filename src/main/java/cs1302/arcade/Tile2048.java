@@ -52,6 +52,9 @@ public class Tile2048 extends ImageView{
 
     public void setNumber(int number) {
         this.number = number;
+        if(number == 2048) {
+            game.win();
+        }
     }
 
     public void merge(Tile2048 tile) {
