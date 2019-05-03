@@ -71,7 +71,10 @@ public class ArcadeApp extends Application {
         
 
         //Creating Space Invaders box
-        spInvaders.getChildren().add(new ImageView(new Image("spaceInv/siBackground.jpg")));
+        spInvaders.getChildren().add(new ImageView(new Image("spaceInv/background.png")));
+        ImageView logo = new ImageView(new Image("spaceInv/logo.png"));
+        logo.setTranslateY(-50);
+        spInvaders.getChildren().add(logo);
 
         group.setOnMouseClicked(createMouseHandler());
         vbox.getChildren().addAll(sp2048, spInvaders);
