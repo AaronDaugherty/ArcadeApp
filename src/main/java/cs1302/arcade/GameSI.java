@@ -3,7 +3,7 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.event.EventHandler;
@@ -24,10 +24,10 @@ public class GameSI extends Group {
     ArcadeApp application;
     Rectangle ship;
     Rectangle space;
-    Rectangle test;
+    Rectangle[] aliens;
     ArcButton menu;
     StackPane game;
-    VBox vbox;
+    HBox alienshbox;
     boolean noBullet;
     Rectangle laser;
 
@@ -36,15 +36,19 @@ public class GameSI extends Group {
 	this.setOnKeyPressed(createKeyHandler());
 	ship = new Rectangle(32,32, new ImagePattern(new Image("spaceInv/ship.png")));
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
-	test = new Rectangle(32,32, new ImagePattern(new Image("spaceInv/ship.png")));
+	aliens = new Rectangle[5];
+	alienshbox = new HBox();
+	alienshbox.setTranslateY(0);
+	for(int i = 0; i < 5; i++) {
+	    aliens[i] = new Rectangle(32,32,new ImagePattern(new Image("spaceInv/alien.png")));
+	    alienshbox.getChildren().add(aliens[i]);
+	}
 	laser = new Rectangle(2,4, new ImagePattern(new Image("spaceInv/laser.png")));
-	test.setTranslateY(200);
-	test.setTranslateX(64);
 	ship.setTranslateY(200);
 	game = new StackPane();
 	game.setTranslateX(162);
 	game.setTranslateY(134);
-        game.getChildren().addAll(space,laser,ship,test);
+        game.getChildren().addAll(space,alienshbox,laser,ship);
 	laser.setTranslateY(1000);
 	EventHandler<ActionEvent> handler = event -> laser.setTranslateY(laser.getTranslateY()-1);
 	KeyFrame keyFrame = new KeyFrame(Duration.seconds(.0025), handler);
@@ -100,8 +104,8 @@ public class GameSI extends Group {
     }
 
     public void collisionCheck() {
-	if(ship.getBoundsInParent().intersects(test.getBoundsInParent())) {
-	    System.out.println("RED ALRT");
-	}
+	//if(ship.getBoundsInParent().intersects(test.getBoundsInParent())) {
+	//System.out.println("RED ALRT");
+	    //}
     }
 }
