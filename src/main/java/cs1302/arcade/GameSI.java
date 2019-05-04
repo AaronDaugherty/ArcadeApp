@@ -19,15 +19,12 @@ public class GameSI extends Group {
         this.application = application;
         ship = new ImageView(new Image("spaceInv/spaceship.png"));
         game = new StackPane();
-        vbox = new VBox();
-        
-        vbox.getChildren().add(game);
-        this.getChildren().addAll(vbox);
-        game.setAlignment(Pos.CENTER);
+	game.setTranslateX(162);
+	game.setTranslateY(134);
         game.getChildren().addAll(new ImageView(new Image("spaceInv/space.png")),ship);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> 
                              application.setScene(application.getScene()));
-        this.getChildren().addAll(menu);
+        this.getChildren().addAll(menu,game);
     }
     
     
