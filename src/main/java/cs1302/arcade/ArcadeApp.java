@@ -42,6 +42,7 @@ public class ArcadeApp extends Application {
     public Scene getScene() {
         return scene;
     }
+
     
     
     /** {@inheritdoc} */
@@ -98,6 +99,11 @@ public class ArcadeApp extends Application {
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
+	stage.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+		if(key.getCode() == KeyCode.SPACE) {
+		    key.consume();
+		}
+	    });
         stage.setResizable(false);
         stage.show();
         
