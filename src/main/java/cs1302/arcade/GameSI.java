@@ -30,6 +30,9 @@ public class GameSI extends Group {
     HBox alienshbox;
     boolean noBullet;
     Rectangle laser;
+    KeyFrame laserKey;
+    EventHandler<ActionEvent> laserHandler;
+    Timeline laserTime;
 
     public GameSI(ArcadeApp application) {
         this.application = application;
@@ -43,23 +46,43 @@ public class GameSI extends Group {
 	    aliens[i] = new Rectangle(32,32,new ImagePattern(new Image("spaceInv/alien.png")));
 	    alienshbox.getChildren().add(aliens[i]);
 	}
-	laser = new Rectangle(2,4, new ImagePattern(new Image("spaceInv/laser.png")));
+	this.setUpLaser();
 	ship.setTranslateY(200);
 	game = new StackPane();
 	game.setTranslateX(162);
 	game.setTranslateY(134);
         game.getChildren().addAll(space,alienshbox,laser,ship);
-	laser.setTranslateY(1000);
-	EventHandler<ActionEvent> handler = event -> laser.setTranslateY(laser.getTranslateY()-1);
-	KeyFrame keyFrame = new KeyFrame(Duration.seconds(.0025), handler);
-	Timeline timeline = new Timeline();
-	timeline.setCycleCount(Timeline.INDEFINITE);
-	timeline.getKeyFrames().add(keyFrame);
-	timeline.play();
-        menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> 
-                             application.setScene(application.getScene()));
+        menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
+		application.setScene(application.getScene());
+		laserTime.pause();
+	});
+		    
         this.getChildren().addAll(menu,game);
 	noBullet = true;
+    }
+
+    public void play() {
+	laserTime.play();
+    }
+
+    private void setUpLaser() {
+	laser = new Rectangle(2,4, new ImagePattern(new Image("spaceInv/laser.png")));
+	laserHandler = event -> {
+	    laser.setTranslateY(laser.getTranslateY()-1);
+	    for(int i = 0; i < 5; i++) {
+		if(laser.getBoundsInParent().intersects(aliens[i].getBoundsInParent())) {
+		    aliens[i].setTranslateX(1000);
+		    laser.setTranslateX(1000);
+		}
+	    }
+	};
+	laserKey = new KeyFrame(Duration.seconds(.0025), laserHandler);
+        laserTime = new Timeline();
+	laser.setTranslateY(1000);
+        laserTime.setCycleCount(Timeline.INDEFINITE);
+        laserTime.getKeyFrames().add(laserKey);
+        laserTime.play();
+
     }
     
     private EventHandler<? super KeyEvent> createKeyHandler() {
