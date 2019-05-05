@@ -8,3 +8,9 @@ authored by members of your project team.
 * Jester Font Studio. "Wild Wood Font" October 2000
 * https://www.fontspace.com/jester-font-studio/wild-wood
 * Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+
+## Start Game Image
+* src/main/resources/spaceInv/start.png
+* VideoGameElements. "Retro Start Button" 2015
+* https://www.deviantart.com/videogameelements/art/Retro-Start-Button-548889703
+    
