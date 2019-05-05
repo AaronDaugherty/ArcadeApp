@@ -4,6 +4,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.event.EventHandler;
@@ -26,22 +27,25 @@ public class GameSI extends Group {
     ArcadeApp application;
     Rectangle ship;
     Rectangle space;
-    LinkedList<Rectangle> aliens;
+    LinkedList<Alien> aliens;
     ArcButton menu;
+    ArcButton reset;
     StackPane game;
+    VBox aliensvbox;
     HBox alienshbox;
+    HBox alienshbox2;
     boolean noBullet;
     Rectangle laser;
 
     Timeline laserTime;
     Timeline animTime;
-    
     Timeline alienTime;
 
     Rectangle leftBound;
     Rectangle rightBound;
     int alienDirection;
     int anim;
+
     
     public GameSI(ArcadeApp application) {
         this.application = application;
@@ -54,10 +58,17 @@ public class GameSI extends Group {
 	game.setTranslateX(162);
 	game.setTranslateY(134);
 	this.setUpAliens();
-        game.getChildren().addAll(space,alienshbox,laser,ship);
+        game.getChildren().addAll(space,aliensvbox,laser,ship);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
 		application.setScene(application.getScene());
 		this.pause();
+	});
+	reset = new ArcButton(100,0,new Image("2048/TryAgain.png"), e -> {
+		for(Alien alien: aliens) {
+		    alien.setTranslateX(0);
+		    alien.setTranslateY(0);
+		    alienDirection = 0;
+		}
 	});
 	anim = 1;
 	alienDirection = 0;
@@ -66,37 +77,46 @@ public class GameSI extends Group {
 	leftBound = new Rectangle(1,500,Color.BLUE);
 	leftBound.setTranslateX(0);
 	game.getChildren().add(rightBound);
-        this.getChildren().addAll(menu,game);
+        this.getChildren().addAll(menu,reset, game);
 	noBullet = true;
-	this.pause();
 	this.setUpAnimations();
+	this.pause();
     }
 
     public void pause() {
 	laserTime.pause();
 	alienTime.pause();
+	animTime.pause();
     }
     
     public void play() {
 	laserTime.play();
 	alienTime.play();
+	animTime.play();
     }
 
     private void setUpAliens() {
-	aliens = new LinkedList<Rectangle>();
+	aliens = new LinkedList<Alien>();
         alienshbox = new HBox();
+	alienshbox2 = new HBox();
+	aliensvbox = new VBox();
+	aliensvbox.getChildren().addAll(alienshbox2, alienshbox);
         for(int i = 0; i < 5; i++) {
-            aliens.add(new Rectangle(32,32,new ImagePattern(new Image("spaceInv/alien1open.png"))));
+            aliens.add(new Alien(new Image("spaceInv/alien1open.png"),32,32,1));
             alienshbox.getChildren().add(aliens.get(i));
-	    aliens.get(i).setTranslateX(300);
+	    //aliens.get(i).setTranslateX(300);
         }
+	for(int i = aliens.size(); i < 10; i++) {
+	    aliens.add(new Alien(new Image("spaceInv/alien2open.png"),32,32,2));
+	    alienshbox2.getChildren().add(aliens.get(i));
+	}
 	EventHandler<ActionEvent> alienHandler = event -> {
 	    switch (alienDirection) {
 	    case 0:
-	    for(Rectangle alien: aliens) {
+	    for(Alien alien: aliens) {
 		if(alien.getBoundsInParent().intersects(rightBound.getBoundsInParent())) {
 		    alienDirection = 1;
-		    for(Rectangle alien2: aliens) {
+		    for(Alien alien2: aliens) {
 			alien2.setTranslateY(alien2.getTranslateY() + 16);
 		    }
 		    break;
@@ -105,10 +125,10 @@ public class GameSI extends Group {
 	    }
 	    break;
 	    case 1:
-	    for(Rectangle alien: aliens) {
+	    for(Alien alien: aliens) {
 		if(alien.getBoundsInParent().intersects(leftBound.getBoundsInParent())) {
 		    alienDirection = 0;
-		    for(Rectangle alien2: aliens) {
+		    for(Alien alien2: aliens) {
 			alien2.setTranslateY(alien2.getTranslateY() + 16);
 		    }
 		    break;
@@ -128,17 +148,24 @@ public class GameSI extends Group {
     private void setUpAnimations() {
 	EventHandler<ActionEvent> animHandler = event -> {
 	    if(anim == 0) {
-		for(Rectangle alien: aliens) {
-		    alien.setFill(new ImagePattern(new Image("spaceInv/alien1closed.png")));
+		for(Alien alien: aliens) {
+		    if(alien.getType() == 1) {
+			alien.setFill(new ImagePattern(new Image("spaceInv/alien1closed.png")));
+		    } else if(alien.getType() == 2) {
+			alien.setFill(new ImagePattern(new Image("spaceInv/alien2closed.png")));
+		    }
 		}
 		anim = 1;
 	    } else {
-		for(Rectangle alien: aliens) {
-		    alien.setFill(new ImagePattern(new Image("spaceInv/alien1open.png")));
+		for(Alien alien: aliens) {
+		    if(alien.getType() == 1) {
+			alien.setFill(new ImagePattern(new Image("spaceInv/alien1open.png")));
+		    } else if(alien.getType() == 2) {
+			alien.setFill(new ImagePattern(new Image("spaceInv/alien2open.png")));
+		    }
 		}
 		anim = 0;
 	    }
-	    
 	};
 	KeyFrame animKey = new KeyFrame(Duration.seconds(1),animHandler);
 	animTime = new Timeline();
@@ -148,10 +175,10 @@ public class GameSI extends Group {
     }
 
     private void setUpLaser() {
-	laser = new Rectangle(2,4, new ImagePattern(new Image("spaceInv/laser.png")));
+	laser = new Rectangle(4,8, new ImagePattern(new Image("spaceInv/laser.png")));
 	EventHandler<ActionEvent> laserHandler = event -> {
 	    laser.setTranslateY(laser.getTranslateY()-1);
-	    for(Rectangle alien: aliens) {
+	    for(Alien alien: aliens) {
 		if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
 		    alien.setTranslateX(5000);
 		    laser.setTranslateX(1000);
