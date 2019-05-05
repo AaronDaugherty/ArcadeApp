@@ -32,18 +32,16 @@ public class GameSI extends Group {
     HBox alienshbox;
     boolean noBullet;
     Rectangle laser;
-    
-    KeyFrame laserKey;
-    EventHandler<ActionEvent> laserHandler;
-    Timeline laserTime;
 
-    KeyFrame alienKey;
-    EventHandler<ActionEvent> alienHandler;
+    Timeline laserTime;
+    Timeline animTime;
+    
     Timeline alienTime;
 
     Rectangle leftBound;
     Rectangle rightBound;
     int alienDirection;
+    int anim;
     
     public GameSI(ArcadeApp application) {
         this.application = application;
@@ -59,8 +57,9 @@ public class GameSI extends Group {
         game.getChildren().addAll(space,alienshbox,laser,ship);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
 		application.setScene(application.getScene());
-		laserTime.pause();
+		this.pause();
 	});
+	anim = 1;
 	alienDirection = 0;
 	rightBound = new Rectangle(1,500,Color.BLUE);
 	rightBound.setTranslateX(350);
@@ -69,27 +68,37 @@ public class GameSI extends Group {
 	game.getChildren().add(rightBound);
         this.getChildren().addAll(menu,game);
 	noBullet = true;
+	this.pause();
+	this.setUpAnimations();
     }
 
+    public void pause() {
+	laserTime.pause();
+	alienTime.pause();
+    }
+    
     public void play() {
 	laserTime.play();
+	alienTime.play();
     }
 
     private void setUpAliens() {
 	aliens = new LinkedList<Rectangle>();
         alienshbox = new HBox();
-        alienshbox.setTranslateY(0);
         for(int i = 0; i < 5; i++) {
-            aliens.add(new Rectangle(32,32,new ImagePattern(new Image("spaceInv/alien.png"))));
+            aliens.add(new Rectangle(32,32,new ImagePattern(new Image("spaceInv/alien1open.png"))));
             alienshbox.getChildren().add(aliens.get(i));
+	    aliens.get(i).setTranslateX(300);
         }
-	//alienshbox.maxWidth(160);
-	alienHandler = event -> {
+	EventHandler<ActionEvent> alienHandler = event -> {
 	    switch (alienDirection) {
 	    case 0:
 	    for(Rectangle alien: aliens) {
 		if(alien.getBoundsInParent().intersects(rightBound.getBoundsInParent())) {
 		    alienDirection = 1;
+		    for(Rectangle alien2: aliens) {
+			alien2.setTranslateY(alien2.getTranslateY() + 16);
+		    }
 		    break;
 		}
 		alien.setTranslateX(alien.getTranslateX() + 1);
@@ -99,34 +108,57 @@ public class GameSI extends Group {
 	    for(Rectangle alien: aliens) {
 		if(alien.getBoundsInParent().intersects(leftBound.getBoundsInParent())) {
 		    alienDirection = 0;
+		    for(Rectangle alien2: aliens) {
+			alien2.setTranslateY(alien2.getTranslateY() + 16);
+		    }
 		    break;
 		}
 		alien.setTranslateX(alien.getTranslateX() - 1);
-
 	    }
 	    break;
 	    }
-	  
 	};
-	alienKey = new KeyFrame(Duration.seconds(.005), alienHandler);
+	KeyFrame alienKey = new KeyFrame(Duration.seconds(.005), alienHandler);
 	alienTime = new Timeline();
 	alienTime.setCycleCount(Timeline.INDEFINITE);
 	alienTime.getKeyFrames().add(alienKey);
 	alienTime.play();
     }
 
+    private void setUpAnimations() {
+	EventHandler<ActionEvent> animHandler = event -> {
+	    if(anim == 0) {
+		for(Rectangle alien: aliens) {
+		    alien.setFill(new ImagePattern(new Image("spaceInv/alien1closed.png")));
+		}
+		anim = 1;
+	    } else {
+		for(Rectangle alien: aliens) {
+		    alien.setFill(new ImagePattern(new Image("spaceInv/alien1open.png")));
+		}
+		anim = 0;
+	    }
+	    
+	};
+	KeyFrame animKey = new KeyFrame(Duration.seconds(1),animHandler);
+	animTime = new Timeline();
+	animTime.setCycleCount(Timeline.INDEFINITE);
+	animTime.getKeyFrames().add(animKey);
+	animTime.play();
+    }
+
     private void setUpLaser() {
 	laser = new Rectangle(2,4, new ImagePattern(new Image("spaceInv/laser.png")));
-	laserHandler = event -> {
+	EventHandler<ActionEvent> laserHandler = event -> {
 	    laser.setTranslateY(laser.getTranslateY()-1);
 	    for(Rectangle alien: aliens) {
 		if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
-		    alien.setTranslateX(1000);
+		    alien.setTranslateX(5000);
 		    laser.setTranslateX(1000);
 		}
 	    }
 	};
-	laserKey = new KeyFrame(Duration.seconds(.0025), laserHandler);
+	KeyFrame laserKey = new KeyFrame(Duration.seconds(.0025), laserHandler);
         laserTime = new Timeline();
 	laser.setTranslateY(-1000);
         laserTime.setCycleCount(Timeline.INDEFINITE);
