@@ -61,11 +61,16 @@ public class GameSI extends Group {
     Text level2;
     Text level3;
     boolean paused;
+    Text scoreText;
+    int score;
     
     public GameSI(ArcadeApp application) {
         this.application = application;
 	noBullet = true;
 	level = 1;
+	scoreText = new Text("Score: "+Integer.toString(score));
+	scoreText.setFill(Color.rgb(255,255,255));
+	scoreText.setTranslateY(-225);
 	timer = new Timer(true);
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
 	frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
@@ -82,12 +87,14 @@ public class GameSI extends Group {
 	joystick.setTranslateX(580);
 	joystick.setTranslateY(580);
 	this.setUpLevel();
-	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3);
+	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
 		application.setScene(application.getScene());
 		this.pause();
 	});
 	reset = new ArcButton(100,0,new Image("2048/TryAgain.png"), e -> {
+		score = 0;
+		scoreText.setText("Score: "+Integer.toString(score));
 		reset.setDisable(true);
 		menu.setDisable(true);
 		alienDirection = 0;
@@ -255,7 +262,7 @@ public class GameSI extends Group {
             }
 
 	};
-	KeyFrame alienKey = new KeyFrame(Duration.seconds(.005), alienHandler);
+	KeyFrame alienKey = new KeyFrame(Duration.seconds(.020), alienHandler);
 	alienTime = new Timeline();
 	alienTime.setCycleCount(Timeline.INDEFINITE);
 	alienTime.getKeyFrames().add(alienKey);
@@ -306,6 +313,14 @@ public class GameSI extends Group {
 		    alien.setTranslateX(5000);
 		    laser.setTranslateX(1000);
 		    alien.setDead(true);
+		    if(alien.getType() == 1) {
+			score+= 100;
+		    } else if(alien.getType() == 2) {
+			score += 200;
+		    } else if(alien.getType() == 3) {
+			score += 300;
+		    }
+		    scoreText.setText("Score: "+Integer.toString(score));
 		}
 	    }
 	    if(laser.getTranslateY() < -250) {
