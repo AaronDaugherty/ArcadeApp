@@ -36,11 +36,12 @@ public class GameSI extends Group {
     HBox alienshbox2;
     boolean noBullet;
     Rectangle laser;
-
+    int shipAct;
     Timeline laserTime;
     Timeline animTime;
     Timeline alienTime;
-
+    Timeline playerTimeR;
+    Timeline playerTimeL;
     Rectangle leftBound;
     Rectangle rightBound;
     int alienDirection;
@@ -49,16 +50,15 @@ public class GameSI extends Group {
     
     public GameSI(ArcadeApp application) {
         this.application = application;
-	this.setOnKeyPressed(createKeyHandler());
-	ship = new Rectangle(32,32, new ImagePattern(new Image("spaceInv/ship.png")));
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
 	this.setUpLaser();
+	this.setUpPlayer();
 	ship.setTranslateY(200);
 	game = new StackPane();
 	game.setTranslateX(162);
 	game.setTranslateY(134);
 	this.setUpAliens();
-        game.getChildren().addAll(space,aliensvbox,laser,ship);
+	game.getChildren().addAll(space,aliensvbox,laser,ship);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
 		application.setScene(application.getScene());
 		this.pause();
@@ -83,6 +83,34 @@ public class GameSI extends Group {
 	this.pause();
     }
 
+    public EventHandler<ActionEvent> movementR() {
+	return e -> {
+	    this.shipRight();
+	};
+    }
+
+    public EventHandler<ActionEvent> movementL() {
+	return e -> {
+	    this.shipLeft();
+	};
+    }
+    
+    public void setUpPlayer() {
+	int shipAct = 1;
+	ship = new Rectangle(32,32, new ImagePattern(new Image("spaceInv/ship.png")));
+	this.setOnKeyPressed(createKeyHandler());
+	this.setOnKeyReleased(createKeyHandler2());
+	KeyFrame playerKeyR = new KeyFrame(Duration.seconds(.02), this.movementR());
+        playerTimeR = new Timeline();
+        playerTimeR.setCycleCount(Timeline.INDEFINITE);
+        playerTimeR.getKeyFrames().add(playerKeyR);
+
+	KeyFrame playerKeyL = new KeyFrame(Duration.seconds(.02), this.movementL());
+	playerTimeL = new Timeline();
+	playerTimeL.setCycleCount(Timeline.INDEFINITE);
+	playerTimeL.getKeyFrames().add(playerKeyL);
+    }
+    
     public void pause() {
 	laserTime.pause();
 	alienTime.pause();
@@ -198,17 +226,22 @@ public class GameSI extends Group {
 	return event -> {
 
 	    if(event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
-		this.shipLeft();
+		playerTimeL.play();
+	    }else if(event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
+		playerTimeR.play();
+	    } else if((event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W)&&noBullet) {
+	        this.shoot();
 	    }
+	};
+    }
 
-	    if(event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
-		this.shipRight();
+    private EventHandler<? super KeyEvent> createKeyHandler2() {
+	return event -> {
+	    if(event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
+		playerTimeL.pause();
+	    } else if(event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
+		playerTimeR.pause();
 	    }
-
-	    if((event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W)&&noBullet) {
-		this.shoot();
-	    }
-
 	};
     }
 
