@@ -39,12 +39,9 @@ public class GameSI extends Group {
     ArcButton menu;
     ArcButton reset;
     StackPane game;
-    VBox aliensvbox;
-    HBox alienshbox;
-    HBox alienshbox2;
-    HBox alienshbox3;
     boolean noBullet;
     Rectangle laser;
+    VBox aliensvbox;
     Timeline laserTime;
     Timeline animTime;
     Timeline alienTime;
@@ -100,14 +97,10 @@ public class GameSI extends Group {
 		alienDirection = 0;
 		ship.setTranslateX(0);
 		laser.setTranslateY(-2000);
-		for(int i = 0; i < 20; i ++) {
-		    aliens.get(i).setTranslateX(0);
-		    aliens.get(i).setTranslateY(0);
-		    aliens.get(i).setDead(false);
-		}
-		for(int i = 20; i < 30; i++) {
-		    aliens.get(i).setTranslateY(2000);
-		    aliens.get(i).setDead(true);
+		for(Alien alien: aliens) {
+		    alien.setTranslateX(0);
+		    alien.setTranslateY(0);
+		    alien.setDead(false);
 		}
 		this.setLevel(1);
 		this.level();
@@ -205,25 +198,37 @@ public class GameSI extends Group {
 
     private void setUpAliens() {
 	aliens = new LinkedList<Alien>();
-        alienshbox = new HBox();
-	alienshbox2 = new HBox();
-	alienshbox3 = new HBox();
+        HBox alienshbox = new HBox();
+	HBox alienshbox2 = new HBox();
+	HBox alienshbox3 = new HBox();
+	HBox alienshbox4 = new HBox();
+	HBox alienshbox5 = new HBox();
 	aliensvbox = new VBox();
-	aliensvbox.getChildren().addAll(alienshbox3,alienshbox2, alienshbox);
-        for(int i = 0; i < 10; i++) {
+	aliensvbox.getChildren().addAll(alienshbox5,alienshbox4,alienshbox3,alienshbox2, alienshbox);
+        for(int i = 0; i < 20; i++) {
             aliens.add(new Alien(new Image("spaceInv/alien1open.png"),32,32,1));
-            alienshbox.getChildren().add(aliens.get(i));
-	    //aliens.get(i).setTranslateX(300);
+	    if(i < 10) {
+		alienshbox.getChildren().add(aliens.get(i));
+		aliens.get(i).setYDist(160);
+	    } else {
+		alienshbox2.getChildren().add(aliens.get(i));
+		aliens.get(i).setYDist(128);
+	    }
         }
-	for(int i = aliens.size(); i < 20; i++) {
+	for(int i = aliens.size(); i < 40; i++) {
 	    aliens.add(new Alien(new Image("spaceInv/alien2open.png"),32,32,2));
-	    alienshbox2.getChildren().add(aliens.get(i));
+	    if(i<30) {
+		alienshbox3.getChildren().add(aliens.get(i));
+		aliens.get(i).setYDist(96 );
+	    } else {
+		alienshbox4.getChildren().add(aliens.get(i));
+		aliens.get(i).setYDist(64);
+	    }
 	}
-	for(int i = aliens.size(); i < 30; i++) {
+	for(int i = aliens.size(); i < 50; i++) {
 	    aliens.add(new Alien(new Image("spaceInv/alien3open.png"),32,32,3));
-	    alienshbox3.getChildren().add(aliens.get(i));
-	    aliens.get(i).setTranslateY(5000);
-	    aliens.get(i).setDead(true);
+	    alienshbox5.getChildren().add(aliens.get(i));
+	    aliens.get(i).setYDist(32);
 	}
 	EventHandler<ActionEvent> alienHandler = event -> {
 	    switch (alienDirection) {
@@ -307,31 +312,34 @@ public class GameSI extends Group {
     private void setUpLaser() {
 	laser = new Rectangle(4,8, new ImagePattern(new Image("spaceInv/laser.png")));
 	EventHandler<ActionEvent> laserHandler = event -> {
-	    laser.setTranslateY(laser.getTranslateY()-1);
+	    laser.setTranslateY(laser.getTranslateY()-10);
 	    for(Alien alien: aliens) {
-		if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
-		    noBullet = true;
-		    alien.setTranslateX(5000);
-		    laser.setTranslateX(1000);
-		    alien.setDead(true);
-		    if(alien.getType() == 1) {
-			score+= 100;
-		    } else if(alien.getType() == 2) {
-			score += 200;
-		    } else if(alien.getType() == 3) {
-			score += 300;
+		if(laser.getTranslateY()+32 <= alien.getTranslateY()-alien.getYDist()&&
+		   laser.getTranslateY()-32 <= alien.getTranslateY()-alien.getYDist()) {
+		    if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
+			noBullet = true;
+			alien.setTranslateX(5000);
+			laser.setTranslateX(1000);
+			alien.setDead(true);
+			if(alien.getType() == 1) {
+			    score+= 100;
+			} else if(alien.getType() == 2) {
+			    score += 200;
+			} else if(alien.getType() == 3) {
+			    score += 300;
+			}
+			scoreText.setText("Score: "+Integer.toString(score));
+			
 		    }
-		    scoreText.setText("Score: "+Integer.toString(score));
 		}
 	    }
 	    if(laser.getTranslateY() < -250) {
-		noBullet = true;
-		laserTime.pause();
-		laser.setTranslateY(1000);
+	    noBullet = true;
+	    laserTime.pause();
+	    laser.setTranslateY(1000);
 	    }
-	    
 	};
-	KeyFrame laserKey = new KeyFrame(Duration.seconds(.0025), laserHandler);
+	KeyFrame laserKey = new KeyFrame(Duration.seconds(.02), laserHandler);
         laserTime = new Timeline();
 	laser.setTranslateY(-1000);
         laserTime.setCycleCount(Timeline.INDEFINITE);
