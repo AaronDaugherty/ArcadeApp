@@ -51,6 +51,7 @@ public class GameSI extends Group {
     Timeline playerTimeR;
     Timeline playerTimeL;
     Timeline levelTime;
+    Timer timer;
     Rectangle leftBound;
     Rectangle rightBound;
     int alienDirection;
@@ -60,14 +61,21 @@ public class GameSI extends Group {
     Text level2;
     Text level3;
     boolean paused;
+    Text scoreText;
+    int score;
     
     public GameSI(ArcadeApp application) {
         this.application = application;
+	noBullet = true;
 	level = 1;
+	scoreText = new Text("Score: "+Integer.toString(score));
+	scoreText.setFill(Color.rgb(255,255,255));
+	scoreText.setTranslateY(-225);
+	timer = new Timer(true);
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
-    frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
-    nebula = new Rectangle(556, 799, new ImagePattern(new Image("spaceInv/nebula.jpg")));
-    joystick = new Rectangle(200, 200, new ImagePattern(new Image("spaceInv/joystick.png")));
+	frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
+	nebula = new Rectangle(556, 799, new ImagePattern(new Image("spaceInv/nebula.jpg")));
+	joystick = new Rectangle(200, 200, new ImagePattern(new Image("spaceInv/joystick.png")));
 	this.setUpLaser();
 	this.setUpPlayer();
 	ship.setTranslateY(200);
@@ -75,28 +83,34 @@ public class GameSI extends Group {
 	game.setTranslateX(162);
 	game.setTranslateY(134);
 	this.setUpAliens();
-
-    nebula.setTranslateX(862);
-    joystick.setTranslateX(580);
-    joystick.setTranslateY(580);
-
+	nebula.setTranslateX(862);
+	joystick.setTranslateX(580);
+	joystick.setTranslateY(580);
 	this.setUpLevel();
-	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3);
+	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
 		application.setScene(application.getScene());
 		this.pause();
 	});
 	reset = new ArcButton(100,0,new Image("2048/TryAgain.png"), e -> {
+		score = 0;
+		scoreText.setText("Score: "+Integer.toString(score));
+		reset.setDisable(true);
+		menu.setDisable(true);
+		alienDirection = 0;
+		ship.setTranslateX(0);
+		laser.setTranslateY(-2000);
 		for(int i = 0; i < 20; i ++) {
-		    this.pause();
 		    aliens.get(i).setTranslateX(0);
 		    aliens.get(i).setTranslateY(0);
-		    alienDirection = 0;
 		    aliens.get(i).setDead(false);
-		    this.setLevel(1);
-		    this.play();
-		    ship.setTranslateX(0);
 		}
+		for(int i = 20; i < 30; i++) {
+		    aliens.get(i).setTranslateY(2000);
+		    aliens.get(i).setDead(true);
+		}
+		this.setLevel(1);
+		this.level();
 	});
 	anim = 1;
 	alienDirection = 0;
@@ -105,7 +119,7 @@ public class GameSI extends Group {
 	leftBound = new Rectangle(1,500,Color.BLUE);
 	leftBound.setTranslateX(0);
 	game.getChildren().add(rightBound);
-    this.getChildren().addAll(frame,menu,reset,game,nebula,joystick);
+	this.getChildren().addAll(frame,menu,reset,game,nebula,joystick);
 	noBullet = true;
 	this.setUpAnimations();
 	this.pause();
@@ -168,24 +182,25 @@ public class GameSI extends Group {
 	playerTimeL.pause();
     }
     
+
     public void play() {
 	this.level();
-	Timer t = new Timer(true);
-	t.schedule(new LevelTask(), 2000);
+	TimerTask levelTask = new TimerTask() {
+		public void run() {
+		    alienTime.play();
+		    animTime.play();
+		    level1.setOpacity(0);
+		    level2.setOpacity(0);
+		    level3.setOpacity(0);
+		    paused = false;
+		    reset.setDisable(false);
+		    menu.setDisable(false);
+		    cancel();
+		}
+	    };
+	timer.schedule(levelTask,2000);
     }
-
-    class LevelTask extends TimerTask {
-	public void run() {
-	    laserTime.play();
-	    alienTime.play();
-	    animTime.play();
-	    level1.setOpacity(0);
-	    level2.setOpacity(0);
-	    level3.setOpacity(0);
-	    paused = false;
-	    cancel();
-	}
-    }
+	    
 
     private void setUpAliens() {
 	aliens = new LinkedList<Alien>();
@@ -236,8 +251,18 @@ public class GameSI extends Group {
 	    }
 	    break;
 	    }
+	    boolean nextLevel = true;
+            for(Alien alien: aliens) {
+                if(!alien.isDead()) {
+                    nextLevel = false;
+                }
+            }
+            if(nextLevel) {
+                this.setLevel(this.getLevel() + 1);
+            }
+
 	};
-	KeyFrame alienKey = new KeyFrame(Duration.seconds(.005), alienHandler);
+	KeyFrame alienKey = new KeyFrame(Duration.seconds(.020), alienHandler);
 	alienTime = new Timeline();
 	alienTime.setCycleCount(Timeline.INDEFINITE);
 	alienTime.getKeyFrames().add(alienKey);
@@ -269,6 +294,7 @@ public class GameSI extends Group {
 		}
 		anim = 0;
 	    }
+	    
 	};
 	KeyFrame animKey = new KeyFrame(Duration.seconds(1),animHandler);
 	animTime = new Timeline();
@@ -283,20 +309,26 @@ public class GameSI extends Group {
 	    laser.setTranslateY(laser.getTranslateY()-1);
 	    for(Alien alien: aliens) {
 		if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
+		    noBullet = true;
 		    alien.setTranslateX(5000);
 		    laser.setTranslateX(1000);
 		    alien.setDead(true);
+		    if(alien.getType() == 1) {
+			score+= 100;
+		    } else if(alien.getType() == 2) {
+			score += 200;
+		    } else if(alien.getType() == 3) {
+			score += 300;
+		    }
+		    scoreText.setText("Score: "+Integer.toString(score));
 		}
 	    }
-	    boolean nextLevel = true;
-	    for(Alien alien: aliens) {
-		if(!alien.isDead()) {
-		    nextLevel = false;
-		}
+	    if(laser.getTranslateY() < -250) {
+		noBullet = true;
+		laserTime.pause();
+		laser.setTranslateY(1000);
 	    }
-	    if(nextLevel) {
-		this.setLevel(this.getLevel() + 1);
-	    }
+	    
 	};
 	KeyFrame laserKey = new KeyFrame(Duration.seconds(.0025), laserHandler);
         laserTime = new Timeline();
@@ -366,8 +398,12 @@ public class GameSI extends Group {
     }
 
     public void shoot() {
-	laser.setTranslateY(ship.getTranslateY());
-	laser.setTranslateX(ship.getTranslateX());
+	if(noBullet) {
+	    laser.setTranslateY(ship.getTranslateY());
+	    laser.setTranslateX(ship.getTranslateX());
+	    laserTime.play();
+	    noBullet = false;
+	}
     }
 
     public void shipLeft() {
