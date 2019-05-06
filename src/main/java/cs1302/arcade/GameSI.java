@@ -27,6 +27,9 @@ public class GameSI extends Group {
     ArcadeApp application;
     Rectangle ship;
     Rectangle space;
+    Rectangle frame;
+    Rectangle nebula;
+    Rectangle joystick;
     LinkedList<Alien> aliens;
     ArcButton menu;
     ArcButton reset;
@@ -51,6 +54,9 @@ public class GameSI extends Group {
     public GameSI(ArcadeApp application) {
         this.application = application;
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
+    frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
+    nebula = new Rectangle(556, 799, new ImagePattern(new Image("spaceInv/nebula.jpg")));
+    joystick = new Rectangle(200, 200, new ImagePattern(new Image("spaceInv/joystick.png")));
 	this.setUpLaser();
 	this.setUpPlayer();
 	ship.setTranslateY(200);
@@ -58,6 +64,9 @@ public class GameSI extends Group {
 	game.setTranslateX(162);
 	game.setTranslateY(134);
 	this.setUpAliens();
+    nebula.setTranslateX(862);
+    joystick.setTranslateX(580);
+    joystick.setTranslateY(580);
 	game.getChildren().addAll(space,aliensvbox,laser,ship);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
 		application.setScene(application.getScene());
@@ -77,7 +86,7 @@ public class GameSI extends Group {
 	leftBound = new Rectangle(1,500,Color.BLUE);
 	leftBound.setTranslateX(0);
 	game.getChildren().add(rightBound);
-        this.getChildren().addAll(menu,reset, game);
+    this.getChildren().addAll(frame,menu,reset,game,nebula,joystick);
 	noBullet = true;
 	this.setUpAnimations();
 	this.pause();
