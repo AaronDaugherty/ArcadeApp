@@ -65,7 +65,7 @@ public class GameSI extends Group {
     int score;
     
     public GameSI(ArcadeApp application) {
-        this.application = application;
+    this.application = application;
 	noBullet = true;
 	level = 1;
 	scoreText = new Text("Score: "+Integer.toString(score));
@@ -122,6 +122,7 @@ public class GameSI extends Group {
 	this.getChildren().addAll(frame,menu,reset,game,nebula,joystick);
 	noBullet = true;
 	this.setUpAnimations();
+    this.setUpBarriers();
 	this.pause();
     }
 
@@ -428,5 +429,25 @@ public class GameSI extends Group {
 	//if(ship.getBoundsInParent().intersects(test.getBoundsInParent())) {
 	//System.out.println("RED ALRT");
 	    //}
+    }
+
+    public void setUpBarriers() {
+        Barrier b1 = new Barrier();
+        Barrier b2 = new Barrier();
+        Barrier b3 = new Barrier();
+        Barrier b4 = new Barrier();
+        Barrier b5 = new Barrier();
+        Barrier b6 = new Barrier();
+        Barrier b7 = new Barrier();
+        b1.setTranslateY(150);
+        b1.setTranslateX(-250);
+        b2.setTranslateY(150);
+        b2.setTranslateX(-100);
+        b3.setTranslateY(150);
+        b3.setTranslateX(100);
+        b4.setTranslateY(150);
+        b4.setTranslateX(250);
+        
+        game.getChildren().addAll(b1,b2,b3,b4);
     }
 }

@@ -6,10 +6,10 @@ import javafx.scene.paint.ImagePattern;
 
 public class Barrier extends Rectangle {
 
-    private final Image barrier1 = new Image("spaceInv/barrier1");
-    private final Image barrier2 = new Image("spaceInv/barrier2");
-    private final Image barrier3 = new Image("spaceInv/barrier3");
-    private final Image barrier4 = new Image("spaceInv/barrier4");
+    private final Image barrier1 = new Image("spaceInv/barrier1.png");
+    private final Image barrier2 = new Image("spaceInv/barrier2.png");
+    private final Image barrier3 = new Image("spaceInv/barrier3.png");
+    private final Image barrier4 = new Image("spaceInv/barrier4.png");
 
     private int dmgLvl;
     private int width;
@@ -21,10 +21,10 @@ public class Barrier extends Rectangle {
         this.height = height;
     }
 
-    public Barrier(Image image) {
-        super(66, 75, new ImagePattern(image));
-        this.width = 75;
-        this.height = 66;
+    public Barrier() {
+        super(30, 30, new ImagePattern(new Image("spaceInv/barrier1.png")));
+        this.width = 30;
+        this.height = 30;
     }
 
     public void setDmgLvl(int dmg) {
