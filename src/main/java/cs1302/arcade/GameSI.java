@@ -65,9 +65,9 @@ public class GameSI extends Group {
         this.application = application;
 	level = 1;
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
-    frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
-    nebula = new Rectangle(556, 799, new ImagePattern(new Image("spaceInv/nebula.jpg")));
-    joystick = new Rectangle(200, 200, new ImagePattern(new Image("spaceInv/joystick.png")));
+	frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
+	nebula = new Rectangle(556, 799, new ImagePattern(new Image("spaceInv/nebula.jpg")));
+	joystick = new Rectangle(200, 200, new ImagePattern(new Image("spaceInv/joystick.png")));
 	this.setUpLaser();
 	this.setUpPlayer();
 	ship.setTranslateY(200);
@@ -75,11 +75,9 @@ public class GameSI extends Group {
 	game.setTranslateX(162);
 	game.setTranslateY(134);
 	this.setUpAliens();
-
-    nebula.setTranslateX(862);
-    joystick.setTranslateX(580);
-    joystick.setTranslateY(580);
-
+	nebula.setTranslateX(862);
+	joystick.setTranslateX(580);
+	joystick.setTranslateY(580);
 	this.setUpLevel();
 	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3);
         menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
@@ -87,16 +85,22 @@ public class GameSI extends Group {
 		this.pause();
 	});
 	reset = new ArcButton(100,0,new Image("2048/TryAgain.png"), e -> {
+		reset.setDisable(true);
+		menu.setDisable(true);
+		this.pause();
+		alienDirection = 0;
+		ship.setTranslateX(0);
+		laser.setTranslateY(2000);
 		for(int i = 0; i < 20; i ++) {
-		    this.pause();
 		    aliens.get(i).setTranslateX(0);
 		    aliens.get(i).setTranslateY(0);
-		    alienDirection = 0;
 		    aliens.get(i).setDead(false);
-		    this.setLevel(1);
-		    this.play();
-		    ship.setTranslateX(0);
 		}
+		for(int i = 20; i < 30; i++) {
+		    aliens.get(i).setTranslateY(2000);
+		    aliens.get(i).setDead(true);
+		}
+		this.setLevel(1);
 	});
 	anim = 1;
 	alienDirection = 0;
@@ -105,7 +109,7 @@ public class GameSI extends Group {
 	leftBound = new Rectangle(1,500,Color.BLUE);
 	leftBound.setTranslateX(0);
 	game.getChildren().add(rightBound);
-    this.getChildren().addAll(frame,menu,reset,game,nebula,joystick);
+	this.getChildren().addAll(frame,menu,reset,game,nebula,joystick);
 	noBullet = true;
 	this.setUpAnimations();
 	this.pause();
@@ -183,6 +187,8 @@ public class GameSI extends Group {
 	    level2.setOpacity(0);
 	    level3.setOpacity(0);
 	    paused = false;
+	    reset.setDisable(false);
+	    menu.setDisable(false);
 	    cancel();
 	}
     }
