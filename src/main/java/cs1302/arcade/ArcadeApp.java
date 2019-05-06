@@ -94,12 +94,14 @@ public class ArcadeApp extends Application {
         bnt2048.setOnMouseClicked(e ->  {
                 stage.setScene(scene2048);
                 game2048.requestFocus();
+		game2048.newGame();
             });
 
         bntSI.setOnMouseClicked( e -> {
                 stage.setScene(sceneSI);
 		gameSI.requestFocus();
 		gameSI.play();
+		gameSI.getReset().fire();
             });
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);

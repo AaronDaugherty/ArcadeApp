@@ -77,13 +77,14 @@ public class GameSI extends Group {
 	});
 	reset = new ArcButton(100,0,new Image("2048/TryAgain.png"), e -> {
 		for(int i = 0; i < 20; i ++) {
-		    //this.pause();
+		    this.pause();
 		    aliens.get(i).setTranslateX(0);
 		    aliens.get(i).setTranslateY(0);
 		    alienDirection = 0;
 		    aliens.get(i).setDead(false);
 		    this.setLevel(1);
 		    this.play();
+		    ship.setTranslateX(0);
 		}
 	});
 	anim = 1;
@@ -97,6 +98,10 @@ public class GameSI extends Group {
 	noBullet = true;
 	this.setUpAnimations();
 	this.pause();
+    }
+
+    public ArcButton getReset() {
+	return reset;
     }
 
     public void setUpLevel() {
@@ -154,7 +159,6 @@ public class GameSI extends Group {
     
     public void play() {
 	this.level();
-	paused = false;
 	Timer t = new Timer(true);
 	t.schedule(new LevelTask(), 2000);
     }
@@ -167,6 +171,7 @@ public class GameSI extends Group {
 	    level1.setOpacity(0);
 	    level2.setOpacity(0);
 	    level3.setOpacity(0);
+	    paused = false;
 	    cancel();
 	}
     }
