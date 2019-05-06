@@ -6,6 +6,7 @@ public class Alien extends Rectangle {
     
     int type;
     boolean isDead;
+    int yDist;
     
     public Alien(Image image, int length, int width, int type) {
         super(length,width, new ImagePattern(image));
@@ -23,6 +24,14 @@ public class Alien extends Rectangle {
 
     public boolean isDead() {
 	return isDead;
+    }
+
+    public void setYDist(int yDist) {
+	this.yDist = yDist;
+    }
+
+    public int getYDist() {
+	return yDist;
     }
 
 }
