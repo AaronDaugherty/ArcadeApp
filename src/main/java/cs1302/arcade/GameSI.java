@@ -51,6 +51,7 @@ public class GameSI extends Group {
     Timeline playerTimeR;
     Timeline playerTimeL;
     Timeline levelTime;
+    Timer timer;
     Rectangle leftBound;
     Rectangle rightBound;
     int alienDirection;
@@ -63,7 +64,9 @@ public class GameSI extends Group {
     
     public GameSI(ArcadeApp application) {
         this.application = application;
+	noBullet = true;
 	level = 1;
+	timer = new Timer(true);
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
 	frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
 	nebula = new Rectangle(556, 799, new ImagePattern(new Image("spaceInv/nebula.jpg")));
@@ -87,10 +90,9 @@ public class GameSI extends Group {
 	reset = new ArcButton(100,0,new Image("2048/TryAgain.png"), e -> {
 		reset.setDisable(true);
 		menu.setDisable(true);
-		this.pause();
 		alienDirection = 0;
 		ship.setTranslateX(0);
-		laser.setTranslateY(2000);
+		laser.setTranslateY(-2000);
 		for(int i = 0; i < 20; i ++) {
 		    aliens.get(i).setTranslateX(0);
 		    aliens.get(i).setTranslateY(0);
@@ -101,6 +103,7 @@ public class GameSI extends Group {
 		    aliens.get(i).setDead(true);
 		}
 		this.setLevel(1);
+		this.level();
 	});
 	anim = 1;
 	alienDirection = 0;
@@ -172,26 +175,25 @@ public class GameSI extends Group {
 	playerTimeL.pause();
     }
     
+
     public void play() {
 	this.level();
-	Timer t = new Timer(true);
-	t.schedule(new LevelTask(), 2000);
+	TimerTask levelTask = new TimerTask() {
+		public void run() {
+		    alienTime.play();
+		    animTime.play();
+		    level1.setOpacity(0);
+		    level2.setOpacity(0);
+		    level3.setOpacity(0);
+		    paused = false;
+		    reset.setDisable(false);
+		    menu.setDisable(false);
+		    cancel();
+		}
+	    };
+	timer.schedule(levelTask,2000);
     }
-
-    class LevelTask extends TimerTask {
-	public void run() {
-	    laserTime.play();
-	    alienTime.play();
-	    animTime.play();
-	    level1.setOpacity(0);
-	    level2.setOpacity(0);
-	    level3.setOpacity(0);
-	    paused = false;
-	    reset.setDisable(false);
-	    menu.setDisable(false);
-	    cancel();
-	}
-    }
+	    
 
     private void setUpAliens() {
 	aliens = new LinkedList<Alien>();
@@ -242,6 +244,16 @@ public class GameSI extends Group {
 	    }
 	    break;
 	    }
+	    boolean nextLevel = true;
+            for(Alien alien: aliens) {
+                if(!alien.isDead()) {
+                    nextLevel = false;
+                }
+            }
+            if(nextLevel) {
+                this.setLevel(this.getLevel() + 1);
+            }
+
 	};
 	KeyFrame alienKey = new KeyFrame(Duration.seconds(.005), alienHandler);
 	alienTime = new Timeline();
@@ -275,6 +287,7 @@ public class GameSI extends Group {
 		}
 		anim = 0;
 	    }
+	    
 	};
 	KeyFrame animKey = new KeyFrame(Duration.seconds(1),animHandler);
 	animTime = new Timeline();
@@ -289,20 +302,18 @@ public class GameSI extends Group {
 	    laser.setTranslateY(laser.getTranslateY()-1);
 	    for(Alien alien: aliens) {
 		if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
+		    noBullet = true;
 		    alien.setTranslateX(5000);
 		    laser.setTranslateX(1000);
 		    alien.setDead(true);
 		}
 	    }
-	    boolean nextLevel = true;
-	    for(Alien alien: aliens) {
-		if(!alien.isDead()) {
-		    nextLevel = false;
-		}
+	    if(laser.getTranslateY() < -250) {
+		noBullet = true;
+		laserTime.pause();
+		laser.setTranslateY(1000);
 	    }
-	    if(nextLevel) {
-		this.setLevel(this.getLevel() + 1);
-	    }
+	    
 	};
 	KeyFrame laserKey = new KeyFrame(Duration.seconds(.0025), laserHandler);
         laserTime = new Timeline();
@@ -372,8 +383,12 @@ public class GameSI extends Group {
     }
 
     public void shoot() {
-	laser.setTranslateY(ship.getTranslateY());
-	laser.setTranslateX(ship.getTranslateX());
+	if(noBullet) {
+	    laser.setTranslateY(ship.getTranslateY());
+	    laser.setTranslateX(ship.getTranslateX());
+	    laserTime.play();
+	    noBullet = false;
+	}
     }
 
     public void shipLeft() {
