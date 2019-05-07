@@ -89,6 +89,7 @@ public class GameSI extends Group {
 	scoreText = new Text("Score: "+Integer.toString(score));
 	scoreText.setFill(Color.rgb(255,255,255));
 	scoreText.setTranslateY(-225);
+	scoreText.setTranslateX(-100);
 	livesText = new Text("Lives: "+Integer.toString(lives));
 	livesText.setFill(Color.rgb(255,255,255));
 	livesText.setTranslateY(-225);
@@ -211,6 +212,12 @@ public class GameSI extends Group {
 		    lifeTime = new Timer(true);
 		    lifeTime.schedule(lifeTask,2000);
 		    
+		}
+	    }
+	    for(Barrier barrier: barriers) {
+		if(lasers.get(i).getBoundsInParent().intersects(barrier.getBoundsInParent())) {
+		    lasers.get(i).setTranslateY(-1000);
+		    barrier.setDmgLvl(barrier.getDmgLvl()+1);
 		}
 	    }
 	};
@@ -564,18 +571,18 @@ public class GameSI extends Group {
 	} else if(this.getLevel() ==2) {
 	    level2.setOpacity(1);
 	    this.pause();
-	    for(int i = 0; i < 20; i++) {
-		aliens.get(i).setTranslateX(0);
-		aliens.get(i).setTranslateY(100);
+	    for(Alien alien: aliens) {
+		alien.setTranslateX(0);
+		alien.setTranslateY(60);
 		alienDirection = 0;
-		aliens.get(i).setDead(false);
+		alien.setDead(false);
             }
 	} else {
 	    level3.setOpacity(1);
 	    this.pause();
 	    for(Alien alien: aliens) {
 		alien.setTranslateX(0);
-		alien.setTranslateY(100);
+		alien.setTranslateY(120);
 		alienDirection = 0;
 		alien.setDead(false);
 	    }
