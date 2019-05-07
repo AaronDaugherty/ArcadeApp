@@ -20,6 +20,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
 
+/**
+ * Represents an arcade application.
+ *
+ */
 public class ArcadeApp extends Application {
     Stage stage;
     Group group = new Group();           // main container
@@ -35,13 +39,21 @@ public class ArcadeApp extends Application {
         };
     } // createMouseHandler
 
+    /**
+     * Sets the scene with the given scene.
+     * @param A scene object
+     */
     public void setScene(Scene scene) {
         stage.setScene(scene);
-    }
+    }//setScene
 
+    /**
+     * Returns the current scene object.
+     * @returns The current scene object
+     */
     public Scene getScene() {
         return scene;
-    }
+    }//getScene
 
 
     
@@ -57,6 +69,7 @@ public class ArcadeApp extends Application {
         Game2048 game2048 = new Game2048(this);
         GameSI gameSI = new GameSI(this);
         Button bntSI = new Button();
+        //Exit Button
 	    ArcButton bntQuit = new ArcButton(0,0,new Image("spaceInv/exit.png"),
 					  e -> gameSI.getQuit().fire());
         bntQuit.setTranslateY(150);
@@ -70,15 +83,13 @@ public class ArcadeApp extends Application {
         bnt2048.setStyle("-fx-focus-color: transparent;");
         bnt2048.setOnMouseEntered(e -> bnt2048.setGraphic(start2048wm));
         bnt2048.setOnMouseExited(e -> bnt2048.setGraphic(start2048nm));
-	
-        sp2048.getChildren().addAll(bnt2048);
+       	sp2048.getChildren().addAll(bnt2048);
         sp2048.setAlignment(bnt2048,Pos.BOTTOM_CENTER);
         bnt2048.setTranslateY(-40);
         
 
         //Creating Space Invaders box
         ImageView startSI = new ImageView(new Image("spaceInv/start.png"));
-
         spInvaders.getChildren().add(new ImageView(new Image("spaceInv/background.png")));
         ImageView logo = new ImageView(new Image("spaceInv/logo.png"));
         logo.setTranslateY(-50);
@@ -86,20 +97,20 @@ public class ArcadeApp extends Application {
         bntSI.setPadding(Insets.EMPTY);
         bntSI.setTranslateY(120);
         spInvaders.getChildren().addAll(logo,bntSI,bntQuit);
-
         group.setOnMouseClicked(createMouseHandler());
         vbox.getChildren().addAll(sp2048, spInvaders);
         group.getChildren().add(vbox);
-        
+        //Creating game scenes
         scene = new Scene(group, 1024, 768);
         Scene scene2048 = new Scene(game2048, 1024, 768);
         Scene sceneSI = new Scene(gameSI, 1024, 768);
+        //Event for 2048 button
         bnt2048.setOnMouseClicked(e ->  {
                 stage.setScene(scene2048);
                 game2048.requestFocus();
 		game2048.newGame();
             });
-
+        //Event for SpaceInvaders button
         bntSI.setOnMouseClicked( e -> {
                 stage.setScene(sceneSI);
 		gameSI.requestFocus();
@@ -109,7 +120,7 @@ public class ArcadeApp extends Application {
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
-	stage.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+	    stage.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
 		if(key.getCode() == KeyCode.SPACE) {
 		    key.consume();
 		}
