@@ -35,10 +35,11 @@ import java.util.Random;
  */
 public class GameSI extends Group {
 
-    public final ImagePattern alienLsrImg = new ImagePattern(new Image("spaceInv/laser.png"));
+    public final ImagePattern alienLsrImg = new ImagePattern(new Image("spaceInv/alienlaser1.png"));
     
     ArcadeApp application;
     Rectangle ship;
+    boolean hurt;
     Random rand;
     Rectangle space;
     Rectangle frame;
@@ -63,6 +64,8 @@ public class GameSI extends Group {
     Timeline playerTimeL;
     Timeline levelTime;
     Timeline alienShootTime;
+    TimerTask lifeTask;
+    Timer lifeTime;
     Timer timer;
     Rectangle leftBound;
     Rectangle rightBound;
@@ -75,16 +78,27 @@ public class GameSI extends Group {
     boolean paused;
     Text scoreText;
     int score;
-    
+    int lives;
+    Text livesText;
+    ImageView gameOver;
     
     public GameSI(ArcadeApp application) {
-    this.application = application;
+	lives = 3;
+	gameOver = new ImageView(new Image("spaceInv/gameover.png"));
+	gameOver.setOpacity(0);
+	hurt = false;
+	this.application = application;
 	noBullet = true;
 	level = 1;
 	rand = new Random();
 	scoreText = new Text("Score: "+Integer.toString(score));
 	scoreText.setFill(Color.rgb(255,255,255));
 	scoreText.setTranslateY(-225);
+	scoreText.setTranslateX(-100);
+	livesText = new Text("Lives: "+Integer.toString(lives));
+	livesText.setFill(Color.rgb(255,255,255));
+	livesText.setTranslateY(-225);
+	livesText.setTranslateX(50);
 	timer = new Timer(true);
 	space = new Rectangle(700,500, new ImagePattern(new Image("spaceInv/space.png")));
 	frame = new Rectangle(1024, 768, new ImagePattern(new Image("spaceInv/frame.png")));
@@ -104,7 +118,7 @@ public class GameSI extends Group {
 	
 	
 	
-	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText);
+	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText,livesText,gameOver);
 	this.setUpAlienShoot();
 
 
@@ -118,6 +132,10 @@ public class GameSI extends Group {
         
         //Restart button for SpaceInvaders    
 	reset = new ArcButton(100,0,new Image("spaceInv/restart.png"), e -> {
+		gameOver.setOpacity(0);
+		hurt = false;
+		lives = 3;
+		livesText.setText("Lives: "+Integer.toString(lives));
 		score = 0;
 		scoreText.setText("Score: "+Integer.toString(score));
 		reset.setDisable(true);
@@ -130,6 +148,12 @@ public class GameSI extends Group {
 		    aliens.get(i).setTranslateY(0);
 		    aliens.get(i).setDead(false);
 		    
+		}
+		for(Alien alien: aliens) {
+		    alien.setCanShoot(false);
+		}
+		for(int i = 0; i < 10; i++) {
+		    aliens.get(i).setCanShoot(true);
 		}
 		this.alienShoot();
 		reset.setTranslateX(750);
@@ -169,10 +193,38 @@ public class GameSI extends Group {
     public EventHandler<ActionEvent> createLaserShoot(int i) {
 	EventHandler<ActionEvent> event = e -> {
 	    lasers.get(i).setTranslateY(lasers.get(i).getTranslateY()+10);
-	    //if(lasers.get(i).getTranslateY() < -500) {
-	    //	lasers.get(i).setTranslateY(1000);
-	    //	alienLaserTimes.get(i).pause();
-	    //}
+	    if(lasers.get(i).getTranslateY() < -500) {
+	    	lasers.get(i).setTranslateY(1000);
+	    	alienLaserTimes.get(i).pause();
+	    }
+	    if(lasers.get(i).getBoundsInParent().intersects(ship.getBoundsInParent())&&!hurt) {
+		lives = lives -1;
+		livesText.setText("Lives: "+Integer.toString(lives)); 
+		hurt = true;
+		paused = true;
+		if(lives == 0) {
+		    this.gameOver();
+		} else {
+		    ship.setFill(new ImagePattern(new Image("spaceInv/shipdeath.png")));
+		    lifeTask = new TimerTask() {
+			    public void run() {
+				ship.setFill(new ImagePattern(new Image("spaceInv/ship.png")));
+				paused = false;
+				hurt = false;
+				cancel();
+			    }
+			};
+		    lifeTime = new Timer(true);
+		    lifeTime.schedule(lifeTask,2000);
+		    
+		}
+	    }
+	    for(Barrier barrier: barriers) {
+		if(lasers.get(i).getBoundsInParent().intersects(barrier.getBoundsInParent())) {
+		    lasers.get(i).setTranslateY(-1000);
+		    barrier.setDmgLvl(barrier.getDmgLvl()+1);
+		}
+	    }
 	};
 	return event;
     }
@@ -181,12 +233,14 @@ public class GameSI extends Group {
 
     public void setUpAlienShoot() {
 	alienShootTime = new Timeline();
+	alienShootTime.getKeyFrames().add(new KeyFrame(Duration.seconds(.03), e-> System.out.println("TEST")));
 	lasers = new LinkedList<Rectangle>();
-	Rectangle laser = new Rectangle(4,8,alienLsrImg);
+	Rectangle laser = new Rectangle(8,16,alienLsrImg);
 	for(int i = 0; i < 10; i++) {
-	    laser = new Rectangle(4,8,alienLsrImg);
+	    laser = new Rectangle(8,16,alienLsrImg);
 	    lasers.add(laser);
 	    game.getChildren().add(laser);
+	    laser.setTranslateX(1000);
 	    for(int k = 0; k < 5; k++) {
 		if(k == 0) {
 		    aliens.get(i).setCanShoot(true);
@@ -208,12 +262,14 @@ public class GameSI extends Group {
 
     public void shootAlien(Alien alien) {
 	alien.getLaser().setTranslateX(alien.getTranslateX()-alien.getXDist());
-	alien.getLaser().setTranslateY(alien.getTranslateY());
+	alien.getLaser().setTranslateY(alien.getTranslateY()-alien.getYDist());
 	//System.out.println("Alien X: "+alien.getTranslateX());
 	//System.out.println("Alien Y: "+alien.getTranslateY());
 	//System.out.println("Laser X: "+alien.getLaser().getTranslateX());
         //System.out.println("Laser Y: "+alien.getLaser().getTranslateY());
-	alienLaserTimes.get(aliens.indexOf(alien)).play();
+	int laserNum = aliens.indexOf(alien);
+        laserNum = laserNum % 10;
+	alienLaserTimes.get(laserNum).play();
     }
 
     public void alienShoot() {
@@ -234,7 +290,7 @@ public class GameSI extends Group {
 	};
 	KeyFrame alienShootKey = new KeyFrame(Duration.seconds(1), alienShootHandler);
 	alienShootTime.setCycleCount(Timeline.INDEFINITE);
-	alienShootTime.getKeyFrames().add(alienShootKey);
+	alienShootTime.getKeyFrames().set(0,alienShootKey);
     }
 
     public ArcButton getQuit() {
@@ -287,7 +343,20 @@ public class GameSI extends Group {
 	playerTimeL = new Timeline();
 	playerTimeL.setCycleCount(Timeline.INDEFINITE);
 	playerTimeL.getKeyFrames().add(playerKeyL);
+
+        lifeTime = new Timer(true);
+	lifeTask = new TimerTask() {
+		public void run() {
+		    ship.setFill(new ImagePattern(new Image("spaceInv/ship.png")));
+		    paused = false;
+		    hurt = false;
+		    cancel();
+		}
+	    };
+	
+	
     }
+
     
     public void pause() {
 	paused = true;
@@ -296,6 +365,9 @@ public class GameSI extends Group {
 	animTime.pause();
 	playerTimeR.pause();
 	playerTimeL.pause();
+	for(Timeline timeline: alienLaserTimes) {
+	    timeline.pause();
+	}
     }
     
 
@@ -303,6 +375,9 @@ public class GameSI extends Group {
 	this.level();
 	TimerTask levelTask = new TimerTask() {
 		public void run() {
+		    for(Timeline timeline: alienLaserTimes) {
+			timeline.play();
+		    }
 		    alienTime.play();
 		    animTime.play();
 		    level1.setOpacity(0);
@@ -312,11 +387,12 @@ public class GameSI extends Group {
 		    noBullet = true;
 		    reset.setDisable(false);
 		    menu.setDisable(false);
-		    cancel();
+		    //cancel();
 		    if(laser.getTranslateY() > -250 && laser.getTranslateY() < 250) {
 			laserTime.play();
 		    }
 		    alienShootTime.play();
+		    cancel();
 		}
 	    };
 	timer.schedule(levelTask,2000);
@@ -461,7 +537,15 @@ public class GameSI extends Group {
 			}
 			scoreText.setText("Score: "+Integer.toString(score));
 			
+			alien.setCanShoot(false);
+			if(aliens.indexOf(alien) > 39) {
+			    
+			} else {
+			    aliens.get(aliens.indexOf(alien) + 10).setCanShoot(true);
+			    this.alienShoot();
+			}
 		    }
+		    
 		}
 	    }
 	    for(Barrier barrier: barriers) {
@@ -492,18 +576,18 @@ public class GameSI extends Group {
 	} else if(this.getLevel() ==2) {
 	    level2.setOpacity(1);
 	    this.pause();
-	    for(int i = 0; i < 20; i++) {
-		aliens.get(i).setTranslateX(0);
-		aliens.get(i).setTranslateY(100);
+	    for(Alien alien: aliens) {
+		alien.setTranslateX(0);
+		alien.setTranslateY(60);
 		alienDirection = 0;
-		aliens.get(i).setDead(false);
+		alien.setDead(false);
             }
 	} else {
 	    level3.setOpacity(1);
 	    this.pause();
 	    for(Alien alien: aliens) {
 		alien.setTranslateX(0);
-		alien.setTranslateY(100);
+		alien.setTranslateY(120);
 		alienDirection = 0;
 		alien.setDead(false);
 	    }
@@ -617,5 +701,9 @@ public class GameSI extends Group {
 	}
     }
 
+    public void gameOver() {
+	this.pause();
+	gameOver.setOpacity(1);
+    }
     
 }
