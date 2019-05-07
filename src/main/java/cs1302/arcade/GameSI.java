@@ -85,11 +85,11 @@ public class GameSI extends Group {
 	joystick.setTranslateY(580);
 	this.setUpLevel();
 	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText);
-        menu = new ArcButton(0,0,new Image("2048/MainMenu.png"), e -> {
+        menu = new ArcButton(0,0,new Image("spaceInv/mainMenu.png"), e -> {
 		application.setScene(application.getScene());
 		this.pause();
 	});
-	reset = new ArcButton(100,0,new Image("2048/TryAgain.png"), e -> {
+	reset = new ArcButton(100,0,new Image("spaceInv/restart.png"), e -> {
 		score = 0;
 		scoreText.setText("Score: "+Integer.toString(score));
 		reset.setDisable(true);
