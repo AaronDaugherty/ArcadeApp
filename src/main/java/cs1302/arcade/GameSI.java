@@ -81,11 +81,13 @@ public class GameSI extends Group {
     int lives;
     Text livesText;
     ImageView gameOver;
-    
+    ImageView win;
     public GameSI(ArcadeApp application) {
 	lives = 3;
 	gameOver = new ImageView(new Image("spaceInv/gameover.png"));
 	gameOver.setOpacity(0);
+	win = new ImageView(new Image("spaceInv/gameover.png"));
+	win.setOpacity(0);
 	hurt = false;
 	this.application = application;
 	noBullet = true;
@@ -118,7 +120,10 @@ public class GameSI extends Group {
 	
 	
 	
-	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText,livesText,gameOver);
+	game.getChildren().addAll(space,laser,ship,level1,level2,level3,scoreText,livesText,gameOver,win);
+	for(int i = 0; i < 50; i++) {
+	    game.getChildren().add(aliens.get(i));
+	}
 	this.setUpAlienShoot();
 
 
@@ -144,8 +149,6 @@ public class GameSI extends Group {
 		ship.setTranslateX(0);
 		laser.setTranslateY(2000);
 		for(int i = 0; i < 50; i++) {
-		    aliens.get(i).setTranslateX(0);
-		    aliens.get(i).setTranslateY(0);
 		    aliens.get(i).setDead(false);
 		    
 		}
@@ -160,6 +163,8 @@ public class GameSI extends Group {
 		this.setLevel(1);
 		this.level();
 		this.resetBarriers();
+		this.resetAliens();
+		win.setOpacity(0);
 	});
 	quit = new ArcButton(200, 0, new Image("spaceInv/exit.png"), e-> {
 		for(Timeline timeline: alienLaserTimes) {
@@ -261,12 +266,8 @@ public class GameSI extends Group {
     }
 
     public void shootAlien(Alien alien) {
-	alien.getLaser().setTranslateX(alien.getTranslateX()-alien.getXDist());
-	alien.getLaser().setTranslateY(alien.getTranslateY()-alien.getYDist());
-	//System.out.println("Alien X: "+alien.getTranslateX());
-	//System.out.println("Alien Y: "+alien.getTranslateY());
-	//System.out.println("Laser X: "+alien.getLaser().getTranslateX());
-        //System.out.println("Laser Y: "+alien.getLaser().getTranslateY());
+	alien.getLaser().setTranslateX(alien.getTranslateX());
+	alien.getLaser().setTranslateY(alien.getTranslateY());
 	int laserNum = aliens.indexOf(alien);
         laserNum = laserNum % 10;
 	alienLaserTimes.get(laserNum).play();
@@ -397,7 +398,30 @@ public class GameSI extends Group {
 	    };
 	timer.schedule(levelTask,2000);
     }
-	    
+
+    public void resetAliens() {
+	for(int i = 0; i < 10; i++) {
+	    aliens.get(i).setTranslateX(32*i);
+	    aliens.get(i).setTranslateY(-96);
+	}
+	for(int i = 10; i < 20; i++) {
+	    aliens.get(i).setTranslateX((i-10)*32);
+	    aliens.get(i).setTranslateY(-128);
+	}
+	for(int i = 20; i < 30; i++) {
+	    aliens.get(i).setTranslateX((i-20)*32);
+	    aliens.get(i).setTranslateY(-160);
+	}
+	for(int i = 30; i < 40; i++) {
+	    aliens.get(i).setTranslateX((i-30)*32);
+	    aliens.get(i).setTranslateY(-192);
+	}
+	for(int i = 40; i < 50; i++) {
+	    aliens.get(i).setTranslateX((i-40)*32);
+	    aliens.get(i).setTranslateY(-224);
+	}
+	
+    }
 
     private void setUpAliens() {
 	aliens = new LinkedList<Alien>();
@@ -411,11 +435,9 @@ public class GameSI extends Group {
         for(int i = 0; i < 20; i++) {
             aliens.add(new Alien(new Image("spaceInv/alien1open.png"),32,32,1));
 	    if(i < 10) {
-		alienshbox.getChildren().add(aliens.get(i));
 		aliens.get(i).setYDist(160);
 		aliens.get(i).setXDist(i*32);
 	    } else {
-		alienshbox2.getChildren().add(aliens.get(i));
 		aliens.get(i).setYDist(128);
 		aliens.get(i).setXDist(i/2*32);
 	    }
@@ -423,20 +445,18 @@ public class GameSI extends Group {
 	for(int i = aliens.size(); i < 40; i++) {
 	    aliens.add(new Alien(new Image("spaceInv/alien2open.png"),32,32,2));
 	    if(i<30) {
-		alienshbox3.getChildren().add(aliens.get(i));
 		aliens.get(i).setYDist(96 );
 		aliens.get(i).setXDist(i/3*32);
 	    } else {
-		alienshbox4.getChildren().add(aliens.get(i));
 		aliens.get(i).setYDist(64);
 		aliens.get(i).setXDist(i/4*32);
 	    }
 	}
 	for(int i = aliens.size(); i < 50; i++) {
 	    aliens.add(new Alien(new Image("spaceInv/alien3open.png"),32,32,3));
-	    alienshbox5.getChildren().add(aliens.get(i));
 	    aliens.get(i).setYDist(32);
 	}
+	this.resetAliens();
 	EventHandler<ActionEvent> alienHandler = event -> {
 	    switch (alienDirection) {
 	    case 0:
@@ -521,30 +541,28 @@ public class GameSI extends Group {
 	EventHandler<ActionEvent> laserHandler = event -> {
 	    laser.setTranslateY(laser.getTranslateY()-10);
 	    for(Alien alien: aliens) {
-		if(laser.getTranslateY()+32 <= alien.getTranslateY()-alien.getYDist()&&
-		   laser.getTranslateY()-32 <= alien.getTranslateY()-alien.getYDist()) {
-		    if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
-			noBullet = true;
-			alien.setTranslateX(5000);
-			laser.setTranslateX(1000);
-			alien.setDead(true);
-			if(alien.getType() == 1) {
-			    score+= 100;
-			} else if(alien.getType() == 2) {
-			    score += 200;
-			} else if(alien.getType() == 3) {
-			    score += 300;
-			}
-			scoreText.setText("Score: "+Integer.toString(score));
-			
-			alien.setCanShoot(false);
-			if(aliens.indexOf(alien) > 39) {
-			    
-			} else {
-			    aliens.get(aliens.indexOf(alien) + 10).setCanShoot(true);
-			    this.alienShoot();
-			}
+		if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
+		    noBullet = true;
+		    alien.setTranslateX(5000);
+		    laser.setTranslateX(1000);
+		    alien.setDead(true);
+		    if(alien.getType() == 1) {
+			score+= 100;
+		    } else if(alien.getType() == 2) {
+			score += 200;
+		    } else if(alien.getType() == 3) {
+			score += 300;
 		    }
+		    scoreText.setText("Score: "+Integer.toString(score));
+		    
+		    alien.setCanShoot(false);
+		    if(aliens.indexOf(alien) > 39) {
+			
+		    } else {
+			aliens.get(aliens.indexOf(alien) + 10).setCanShoot(true);
+			this.alienShoot();
+		    }
+		    
 		    
 		}
 	    }
@@ -574,23 +592,43 @@ public class GameSI extends Group {
 	    this.pause();
 	    level1.setOpacity(1);
 	} else if(this.getLevel() ==2) {
+	    for(int i = 0; i < 50; i++) {
+		aliens.get(i).setDead(false);
+		if(i < 10) {
+		    aliens.get(i).setCanShoot(true);
+		} else {
+		    aliens.get(i).setCanShoot(false);
+		}
+	    }
 	    level2.setOpacity(1);
 	    this.pause();
-	    for(Alien alien: aliens) {
-		alien.setTranslateX(0);
-		alien.setTranslateY(60);
-		alienDirection = 0;
-		alien.setDead(false);
-            }
-	} else {
+	    this.resetAliens();
+	    for(int i = 0; i < 50; i++) { 
+	        int k = 32;
+		k = k + (-32 * (i/10));
+		aliens.get(i).setTranslateY(k);
+	    }
+	} else if(this.getLevel() == 3){
 	    level3.setOpacity(1);
 	    this.pause();
-	    for(Alien alien: aliens) {
-		alien.setTranslateX(0);
-		alien.setTranslateY(120);
-		alienDirection = 0;
-		alien.setDead(false);
+	    this.resetAliens();
+	    for(int i = 0; i < 50; i++) {
+		aliens.get(i).setDead(false);
+		if(i<10) {
+		    aliens.get(i).setCanShoot(true);
+		} else {
+		    aliens.get(i).setCanShoot(false);
+		}
 	    }
+	    for(int i = 0; i < 50; i ++) {
+                int k = 96;
+                k = k + (-32 * (i/10));
+                aliens.get(i).setTranslateY(k);
+            }
+
+	} else {
+	    this.pause();
+	    win.setOpacity(1);
 	}
     }
 

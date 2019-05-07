@@ -35,6 +35,7 @@ public class Game2048 extends Group{
     StackPane stackpane;
     Random rand;
     Button ngButton;
+    Button exitButton;
     int score;
     Text scoreText;
     Text scoreNumText;
@@ -65,8 +66,10 @@ public class Game2048 extends Group{
                                  e -> application.setScene(application.getScene()));
         ngButton = new ArcButton(0,0,new Image("2048/NewGame.png"),
                                  e -> this.newGame());
-        this.setUpScoreAndGameOver();
-        vbox.getChildren().addAll(mmButton,ngButton,scorevbox,hbox);
+	exitButton = new ArcButton(300,-25, new Image("2048/exit.png"),
+				   e -> application.getGameSI().getQuit().fire());
+	this.setUpScoreAndGameOver();
+        vbox.getChildren().addAll(mmButton,ngButton,exitButton,scorevbox,hbox);
         ngButton.setOnAction(e->this.newGame());
         background = new ImageView(new Image("2048/GameBackground.png"));
         stackpane.getChildren().addAll(background,vbox,GOBackground, gameOver, win); 
