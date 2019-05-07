@@ -576,6 +576,11 @@ public class GameSI extends Group {
                 }
                 alien.setTranslateX(alien.getTranslateX() - 1);
             }
+            for(Alien alien: aliens) {
+                if(alien.getTranslateY() <= ship.getTranslateY()) {
+                    this.gameOver();
+                }
+            }
             break;
             }
             boolean nextLevel = true;
@@ -734,8 +739,7 @@ public class GameSI extends Group {
             }
 
         } else {
-            this.pause();
-            win.setOpacity(1);
+            this.win();
         }
     }
     
@@ -878,6 +882,14 @@ public class GameSI extends Group {
     public void gameOver() {
         this.pause();
         gameOver.setOpacity(1);
+    }
+
+    /**
+     * This method causes the win screen to appear and pause the game.
+     */
+    public void win() {
+        this.pause();
+        win.setOpacity(1);
     }
     
 }

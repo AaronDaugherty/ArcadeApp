@@ -63,7 +63,7 @@ public class Game2048 extends Group{
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
         //Main Menu Button
-        mmButton = new ArcButton(-300, 25,new Image("2048/MainMenu.png")
+        mmButton = new ArcButton(-300, 25,new Image("2048/MainMenu.png"),
                                  e -> application.setScene(application.getScene()));
         //New Game Button
         ngButton = new ArcButton(0,0,new Image("2048/NewGame.png"),
