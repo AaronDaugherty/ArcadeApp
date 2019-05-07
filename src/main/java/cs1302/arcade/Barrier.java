@@ -27,14 +27,15 @@ public class Barrier extends Rectangle {
      */
     public Barrier(int length, int width){
         super(length, width);
-	this.setFill(barrier1);
+	this.setFill(BARRIER_1);
         this.width = width;
         this.height = height;
 	this.setDmgLvl(1);
     }
 
     /**
-     *Constructor for Barrier class. 
+     *Default constructor for Barrier class. Sets height
+     * and width to 30 and sets dmgLvl to 1. 
      *
      */
     public Barrier() {
@@ -45,6 +46,12 @@ public class Barrier extends Rectangle {
 	this.setDmgLvl(1);
     }
 
+    /**
+     *Sets the dmgLvl variable witht he given int
+     *and updates the paint fill with the correct
+     *image for the damage status.
+     *@param int damage level
+     */
     public void setDmgLvl(int dmg) {
         this.dmgLvl = dmg;
         if(dmg == 1) {
@@ -63,7 +70,10 @@ public class Barrier extends Rectangle {
             this.setTranslateX(5000);
         }
     }
-
+    /**
+     *Returns the value of the dmgLvl variable.
+     *@returns an int dmgLvl
+     */
     public int getDmgLvl() {
         return this.dmgLvl;
     }

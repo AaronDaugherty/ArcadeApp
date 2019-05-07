@@ -21,6 +21,10 @@ import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import javafx.scene.paint.Color;
 import javafx.scene.effect.ColorInput;
+/**
+ *Represents a game of 2048.
+ *
+ */
 public class Game2048 extends Group{
 
     TilePane pane;
@@ -41,7 +45,12 @@ public class Game2048 extends Group{
     ImageView background;
     ImageView GOBackground;
     boolean isWin;
-    
+
+    /**
+     *Constructor for Game2048 class. Builds background, text,
+     *and buttons.
+     *@param An ArcadeApp application
+     */
     public Game2048(ArcadeApp application) {
         isWin = false;
         this.application = application;
@@ -65,6 +74,10 @@ public class Game2048 extends Group{
         this.newGame();
     }
 
+    /**
+     *Sets up score and game over text and functionality.
+     *
+     */
     public void setUpScoreAndGameOver() {
         scoreText = new Text("Score");
         scoreNumText = new Text("0");
@@ -100,6 +113,10 @@ public class Game2048 extends Group{
         GOBackground.setMouseTransparent(true);
     }
 
+    /**
+     *Sets up grid for a game of 2048.
+     *
+     */
     public void setUpPane() {
         hbox = new HBox();
         pane = new TilePane();
@@ -118,7 +135,10 @@ public class Game2048 extends Group{
             }
         }
     }
-
+    /**
+     *Resets 2048 game  
+     *
+     */
     public void newGame() {
         for(int i=0;i<4;i++) {
             for(int k=0;k<4;k++) {
@@ -135,7 +155,11 @@ public class Game2048 extends Group{
         this.setScore(0);
         isWin = false;
     }
-    
+
+    /**
+     *Randomly spawns tiles on the gameboard.
+     *
+     */
     public void spawnTile() {
         ArrayList<Tile2048> emptyImgs = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
@@ -159,6 +183,10 @@ public class Game2048 extends Group{
         }
     }
 
+    /**
+     *
+     *
+     */
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
             if(isWin) {

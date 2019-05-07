@@ -28,6 +28,11 @@ import java.util.TimerTask;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import java.util.Random;
+
+/**
+ *
+ *
+ */
 public class GameSI extends Group {
 
     public final ImagePattern alienLsrImg = new ImagePattern(new Image("spaceInv/laser.png"));
