@@ -78,7 +78,9 @@ public class Game2048 extends Group{
     }
 
     /**
-     *Sets up score and game over text and functionality.
+     *Sets up score and game over text and functionality. Adds and sets
+     *color for font for game over and score. Creates transparent 
+     *background image for game over screen.
      *
      */
     public void setUpScoreAndGameOver() {
@@ -117,8 +119,9 @@ public class Game2048 extends Group{
     }
 
     /**
-     *Sets up grid for a game of 2048.
-     *
+     *Sets up grid for a game of 2048. Sets appropriate
+     *values for spacing and size for TilePane. Loops through
+     *2d array of tiles and adds them to the TilePane.
      */
     public void setUpPane() {
         hbox = new HBox();
@@ -139,8 +142,9 @@ public class Game2048 extends Group{
         }
     }
     /**
-     *Resets 2048 game  
-     *
+     *Resets 2048 game. Loops through 2d array of tiles 
+     *and sets all to empty. Reset all end of game pop ups
+     *and then respawns starter tiles.
      */
     public void newGame() {
         for(int i=0;i<4;i++) {
@@ -160,8 +164,9 @@ public class Game2048 extends Group{
     }
 
     /**
-     *Randomly spawns tiles on the gameboard.
-     *
+     *Randomly spawns tiles on the gameboard. Loops through
+     *and randomly places a two or four in exactly two spots
+     *on the game board.
      */
     public void spawnTile() {
         ArrayList<Tile2048> emptyImgs = new ArrayList<>();
@@ -187,7 +192,7 @@ public class Game2048 extends Group{
     }
 
     /**
-     *
+     *Enables movement of tiles with arrow keys and WASD.
      *
      */
     private EventHandler<? super KeyEvent> createKeyHandler() {
@@ -202,24 +207,27 @@ public class Game2048 extends Group{
                 this.shiftUp();
             } else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
                 this.shiftDown();
-            } else if (event.getCode() == KeyCode.M) {
-                tiles[0][0].setNumber(2048);
-                tiles[0][0].setEmpty(false);
-                this.setImages();
-                
-            }
+            } 
             if(this.isFull() && this.isGameOver()) {
                 this.gameOver();
             }
         };
     }
 
+    /**
+     *Sets isWin to true and sets opacity of Game Over Background
+     *to 0.5, creating a fade effect on the screen.
+     */
     public void win() {
         GOBackground.setOpacity(.5);
         win.setOpacity(1);
         isWin = true;
     }
-
+    /**
+     *Updates entire gameboard. Loops through 2d array of tiles
+     *and sets each to its correct image based on its URL.
+     *
+     */
     public void setImages() {
         for(int i = 0; i < 4; i++) {
             for (int k = 0; k< 4; k++) {
@@ -229,13 +237,25 @@ public class Game2048 extends Group{
         }
     }
 
+    /**
+     *Determines if a tile can move left by checking if it is not empty, is 
+     *not on the edge, and the tile to its left has not already merged.
+     *@param i first index in 2d array
+     *@param j second index in 2d array
+     */
     public boolean canGoLeft(int i, int j) {
         if(j < 1 || tiles[i][j].isEmpty() || tiles[i][j-1].hasMerged()) {
             return false;
         }
         return tiles[i][j-1].equals(tiles[i][j]);
     }
-    
+
+    /**
+     *Loops through a 2d array of tiles and checks each one for
+     *the ability to move left, shifts left each tile that is able
+     *and merges tiles who are able to be merged.
+     *
+     */
     public void shiftLeft() {
         int counter = 0;
         for(int i = 0; i < 4; i++) {
@@ -261,6 +281,14 @@ public class Game2048 extends Group{
         }
 
     }
+
+    
+    /**
+     *Determines if a tile can move right by checking if it is not empty, is 
+     *not on the edge, and the tile to its right has not already merged.
+     *@param i first index in 2d array
+     *@param j second index in 2d array
+     */
     public boolean canGoRight(int i, int j) {
         if(j > 2 || tiles[i][j].isEmpty() || tiles[i][j+1].hasMerged()) {
             return false;
@@ -268,6 +296,12 @@ public class Game2048 extends Group{
         return tiles[i][j+1].equals(tiles[i][j]);
 
     }
+        /**
+     *Loops through a 2d array of tiles and checks each one for
+     *the ability to move right, shifts right each tile that is able
+     *and merges tiles who are able to be merged.
+     *
+     */
     public void shiftRight() {
         int counter = 0;
         for(int i = 0; i < 4; i++) {
@@ -295,12 +329,27 @@ public class Game2048 extends Group{
             this.spawnTile();
         }
     }
+
+    
+    /**
+     *Determines if a tile can move up by checking if it is not empty, is 
+     *not on the edge, and the tile above it has not already merged.
+     *@param i first index in 2d array
+     *@param j second index in 2d array
+     */
     public boolean canGoUp(int j, int k) {
         if(j < 1 || tiles[j][k].isEmpty() || tiles[j-1][k].hasMerged()) {
             return false;
         }
         return tiles[j][k].equals(tiles[j-1][k]);
     }
+
+        /**
+     *Loops through a 2d array of tiles and checks each one for
+     *the ability to move up, shifts up each tile that is able
+     *and merges tiles who are able to be merged.
+     *
+     */
     public void shiftUp() {
         int counter = 0;
         for(int k = 0; k < 4; k++) {
@@ -328,12 +377,27 @@ public class Game2048 extends Group{
             this.spawnTile();
         }
     }
+
+    
+    /**
+     *Determines if a tile can move down by checking if it is not empty, is 
+     *not on the edge, and the tile below it has not already merged.
+     *@param i first index in 2d array
+     *@param j second index in 2d array
+     */
     public boolean canGoDown(int j, int k) {
         if(j > 2 || tiles[j][k].isEmpty() || tiles[j+1][k].hasMerged()) {
             return false;
         }
         return tiles[j][k].equals(tiles[j+1][k]);
     }
+
+   /**
+     *Loops through a 2d array of tiles and checks each one for
+     *the ability to move down, shifts down  each tile that is able
+     *and merges tiles who are able to be merged.
+     *
+     */
     public void shiftDown() {
         int counter = 0;
         for(int k = 0; k < 4; k++) {
@@ -360,6 +424,11 @@ public class Game2048 extends Group{
         
     }
 
+    /**
+     *Loops through a 2d array of tiles to check if
+     *every space is occupied.
+     *@returns boolean False if not full, true if full
+     */
     public boolean isFull() {
         for(int i =0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
@@ -370,7 +439,11 @@ public class Game2048 extends Group{
         }
         return true;
     }
-    
+
+    /**
+     *Loops through tiles array and checks if any tiles can move in
+     *any direction. If not, returns true, otherwise returns false.
+     */
     public boolean isGameOver() {
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
