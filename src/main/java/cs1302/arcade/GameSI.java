@@ -91,7 +91,7 @@ public class GameSI extends Group {
 	lives = 3;
 	gameOver = new ImageView(new Image("spaceInv/gameover.png"));
 	gameOver.setOpacity(0);
-	win = new ImageView(new Image("spaceInv/gameover.png"));
+	win = new ImageView(new Image("spaceInv/youwin.png"));
 	win.setOpacity(0);
 	hurt = false;
 	this.application = application;
@@ -130,8 +130,6 @@ public class GameSI extends Group {
 	for(int i = 0; i < 50; i++) {
 	    game.getChildren().add(aliens.get(i));
 	}
-	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText,
-                              livesText,gameOver);
 	this.setUpAlienShoot();
 
 
