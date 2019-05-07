@@ -169,7 +169,7 @@ public class GameSI extends Group {
         joystick.setTranslateY(580);
         livesText.setTranslateY(-225);
         livesText.setTranslateX(50);
-        game.setTranslateX(162);
+        game.setTranslateX(100);
         game.setTranslateY(134);
     }
 
@@ -479,7 +479,10 @@ public class GameSI extends Group {
             };
         timer.schedule(levelTask,2000);
     }
-
+    /**
+     * This method resets the position and instance variables
+     * for each alien in the game.
+     */
     public void resetAliens() {
         for(int i = 0; i < 10; i++) {
             aliens.get(i).setTranslateX(32*i);
@@ -504,15 +507,12 @@ public class GameSI extends Group {
     
     }
 
+    /**
+     * This method creates the aliens and sets their instance
+     * variables for the game the very first time the program is run.
+     */
     private void setUpAliens() {
         aliens = new LinkedList<Alien>();
-        HBox alienshbox = new HBox();
-        HBox alienshbox2 = new HBox();
-        HBox alienshbox3 = new HBox();
-        HBox alienshbox4 = new HBox();
-        HBox alienshbox5 = new HBox();
-        aliensvbox = new VBox();
-        aliensvbox.getChildren().addAll(alienshbox5,alienshbox4,alienshbox3,alienshbox2, alienshbox);
         for(int i = 0; i < 20; i++) {
             aliens.add(new Alien(new Image("spaceInv/alien1open.png"),32,32,1));
             if(i < 10) {
@@ -538,7 +538,20 @@ public class GameSI extends Group {
             aliens.get(i).setYDist(32);
         }
         this.resetAliens();
-        EventHandler<ActionEvent> alienHandler = event -> {
+        KeyFrame alienKey = new KeyFrame(Duration.seconds(.020), this.createAlienHandler());
+        alienTime = new Timeline();
+        alienTime.setCycleCount(Timeline.INDEFINITE);
+        alienTime.getKeyFrames().add(alienKey);
+        alienTime.play();
+    }
+
+    /**
+     * This method handles alien collision and movement each time
+     * it is used.
+     * @return event the EventHandler to handle collision
+     */
+    public EventHandler<ActionEvent> createAlienHandler() {
+        EventHandler<ActionEvent> event = e -> {
             switch (alienDirection) {
             case 0:
             for(Alien alien: aliens) {
@@ -574,15 +587,15 @@ public class GameSI extends Group {
             if(nextLevel) {
                 this.setLevel(this.getLevel() + 1);
             }
-
+            
         };
-        KeyFrame alienKey = new KeyFrame(Duration.seconds(.020), alienHandler);
-        alienTime = new Timeline();
-        alienTime.setCycleCount(Timeline.INDEFINITE);
-        alienTime.getKeyFrames().add(alienKey);
-        alienTime.play();
+        return event;
     }
 
+    /**
+     * This method sets up the animations for aliens when the aliens
+     * are moving throughout the game.
+     */
     private void setUpAnimations() {
         EventHandler<ActionEvent> animHandler = event -> {
             if(anim == 0) {
@@ -616,10 +629,13 @@ public class GameSI extends Group {
         animTime.getKeyFrames().add(animKey);
         animTime.play();
     }
-
-    private void setUpLaser() {
-        laser = new Rectangle(4,8, new ImagePattern(new Image("spaceInv/laser.png")));
-        EventHandler<ActionEvent> laserHandler = event -> {
+    /**
+     * This method creates the event handler for the user's laser
+     * causing it to kill aliens and destroy blocks.
+     * @return event the event handler to handle user laser movement
+     */
+    public EventHandler<ActionEvent> createLaserHandler() {
+        EventHandler<ActionEvent> event = e -> {
             laser.setTranslateY(laser.getTranslateY()-10);
             for(Alien alien: aliens) {
                 if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
@@ -659,7 +675,14 @@ public class GameSI extends Group {
                 laser.setTranslateY(1000);
             }
         };
-        KeyFrame laserKey = new KeyFrame(Duration.seconds(.02), laserHandler);
+        return event;
+    }
+    /**
+     * This method sets up the laser for the user and the timeline that it is on.
+     */
+    private void setUpLaser() {
+        laser = new Rectangle(4,8, new ImagePattern(new Image("spaceInv/laser.png")));
+        KeyFrame laserKey = new KeyFrame(Duration.seconds(.02), this.createLaserHandler());
         laserTime = new Timeline();
         laser.setTranslateY(1000);
         laserTime.setCycleCount(Timeline.INDEFINITE);
@@ -668,6 +691,9 @@ public class GameSI extends Group {
 
     }
 
+    /**
+     * This method handles the levelling for the user. There are 3 levels and then a win screen.
+     */
     public void level() {
         if(this.getLevel() == 1) {
             this.pause();
@@ -712,16 +738,28 @@ public class GameSI extends Group {
             win.setOpacity(1);
         }
     }
-
+    
+    /**
+     * This method gets the level that the user is on.
+     * @return level the level the user is on
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * This method sets the user's level
+     * @param level the level that the user will be on
+     */
     public void setLevel(int level) {
         this.level = level;
         this.play();
     }
-    
+
+    /**
+     * This method creates the KeyHandler for how the user's keys will affect the game.
+     * @return event the KeyEvent the user is currently doing
+     */
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
             if(!paused) {
@@ -736,6 +774,11 @@ public class GameSI extends Group {
         };
     }
 
+    /**
+     * This method creates the second KeyHandler for how releasing keys affects the game.
+     * This method helps remove input lag in the game.
+     * @return event the KeyEvent the user has finished doing
+     */
     private EventHandler<? super KeyEvent> createKeyHandler2() {
         return event -> {
             if(event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
@@ -746,6 +789,9 @@ public class GameSI extends Group {
         };
     }
 
+    /**
+     * This method handles the actual shooting by the user when approriately called
+     */
     public void shoot() {
         if(noBullet) {
             laser.setTranslateY(ship.getTranslateY());
@@ -755,32 +801,34 @@ public class GameSI extends Group {
         }
     }
 
+    /**
+     * This method causes the ship/user to go left.
+     */
     public void shipLeft() {
         if(ship.getTranslateX() - 5 < -333) {
             ship.setTranslateX(-333);
         } else {
             ship.setTranslateX(ship.getTranslateX() -5);
         }
-        this.collisionCheck();
     }
 
+    /**
+     * This method causes the ship/user to go right.
+     */
     public void shipRight() {
         if(ship.getTranslateX() + 5> 333) {
             ship.setTranslateX(333);
         } else {
             ship.setTranslateX(ship.getTranslateX() + 5);
         }
-        this.collisionCheck();
     }
 
-    public void collisionCheck() {
-        //if(ship.getBoundsInParent().intersects(test.getBoundsInParent())) {
-        //System.out.println("RED ALRT");
-        //}
-    }
-
+    
+    /**
+     * This method resets the barrier location for a game reset. It also
+     * resets their damage levels.
+     */
     public void resetBarriers() {
-
         barriers.get(0).setTranslateX(-250);
         barriers.get(1).setTranslateX(-100);
         barriers.get(2).setTranslateX(100);
@@ -807,7 +855,11 @@ public class GameSI extends Group {
             barriers.get(i).setTranslateY(120);
         }
     }
-    
+
+    /**
+     * This method sets up the barriers initially by adding them to their
+     * list and to the scene graph and setting their position.
+     */
     public void setUpBarriers() {
         barriers = new LinkedList<Barrier>();
         for(int i = 0; i < 16; i++) {
@@ -820,6 +872,9 @@ public class GameSI extends Group {
         }
     }
 
+    /**
+     * This method causes the game over screen to appear and pause the game
+     */
     public void gameOver() {
         this.pause();
         gameOver.setOpacity(1);
