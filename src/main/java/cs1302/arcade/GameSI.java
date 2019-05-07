@@ -130,6 +130,7 @@ public class GameSI extends Group {
 		reset.setTranslateX(750);
 		this.setLevel(1);
 		this.level();
+		this.resetBarriers();
 	});
 	quit = new ArcButton(200, 0, new Image("spaceInv/exit.png"), e-> {
 		for(Timeline timeline: alienLaserTimes) {
@@ -570,35 +571,46 @@ public class GameSI extends Group {
 	    //}
     }
 
+    public void resetBarriers() {
+
+	barriers.get(0).setTranslateX(-250);
+	barriers.get(1).setTranslateX(-100);
+	barriers.get(2).setTranslateX(100);
+	barriers.get(3).setTranslateX(250);
+	barriers.get(4).setTranslateX(-190);
+	barriers.get(5).setTranslateX(-40);
+	barriers.get(6).setTranslateX(40);
+	barriers.get(7).setTranslateX(190);
+	barriers.get(8).setTranslateX(205);
+	barriers.get(9).setTranslateX(-235);
+	barriers.get(10).setTranslateX(-55);
+	barriers.get(11).setTranslateX(-205);
+	barriers.get(12).setTranslateX(-85);
+	barriers.get(13).setTranslateX(55);
+	barriers.get(14).setTranslateX(83);
+	barriers.get(15).setTranslateX(235);
+	for(Barrier barrier: barriers) {
+	    barrier.setDmgLvl(1);
+	}
+	for(int i = 0; i < 8; i++) {
+	    barriers.get(i).setTranslateY(150);
+	}
+	for(int i = 8; i < 16; i++) {
+	    barriers.get(i).setTranslateY(120);
+	}
+    }
+    
     public void setUpBarriers() {
 	barriers = new LinkedList<Barrier>();
-
-    Barrier b1 = new Barrier(); Barrier b2 = new Barrier(); Barrier b3 = new Barrier();
-    Barrier b4 = new Barrier(); Barrier b5 = new Barrier(); Barrier b6 = new Barrier();
-    Barrier b7 = new Barrier(); Barrier b8 = new Barrier(); Barrier b9 = new Barrier();
-    Barrier b10 = new Barrier(); Barrier b11 = new Barrier(); Barrier b12 = new Barrier();
-    Barrier b13 = new Barrier(); Barrier b14 = new Barrier(); Barrier b15 = new Barrier();
-    Barrier b16 = new Barrier();
-    b1.setTranslateY(150); b1.setTranslateX(-250);
-    b2.setTranslateY(150); b2.setTranslateX(-100);
-    b3.setTranslateY(150); b3.setTranslateX(100);
-    b4.setTranslateY(150); b4.setTranslateX(250);
-    b5.setTranslateY(150); b5.setTranslateX(-190);
-    b6.setTranslateY(150); b6.setTranslateX(-40);
-    b7.setTranslateY(150); b7.setTranslateX(40);
-    b8.setTranslateY(150); b8.setTranslateX(190);
-    b9.setTranslateY(120); b9.setTranslateX(205);
-    b10.setTranslateY(120); b10.setTranslateX(-235);
-    b11.setTranslateY(120); b11.setTranslateX(-55);
-    b12.setTranslateY(120); b12.setTranslateX(-205);
-    b13.setTranslateY(120); b13.setTranslateX(-85);
-    b14.setTranslateY(120); b14.setTranslateX(55);
-    b15.setTranslateY(120); b15.setTranslateX(83);
-    b16.setTranslateY(120); b16.setTranslateX(235);
-	game.getChildren().addAll(b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,b16);
-    barriers.add(b1); barriers.add(b2); barriers.add(b3); barriers.add(b4);
-    barriers.add(b5); barriers.add(b6); barriers.add(b7); barriers.add(b8);
-    barriers.add(b9); barriers.add(b10); barriers.add(b11); barriers.add(b12);
-    barriers.add(b13); barriers.add(b14); barriers.add(b15); barriers.add(b16);
+	for(int i = 0; i < 16; i++) {
+	    Barrier barrier = new Barrier();
+	    barriers.add(barrier);
+	}
+	this.resetBarriers();
+	for(Barrier barrier:barriers) {
+	    game.getChildren().add(barrier);
+	}
     }
+
+    
 }
