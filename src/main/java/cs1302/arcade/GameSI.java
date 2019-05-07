@@ -90,12 +90,9 @@ public class GameSI extends Group {
      * @param application the parent app running the game
      */
     public GameSI(ArcadeApp application) {
-    
-        gameOver.setOpacity(0);
+        this.setUpVariables();
         win = new ImageView(new Image("spaceInv/youwin.png"));
         win.setOpacity(0);
-    
-        scoreText.setFill(Color.rgb(255,255,255));
         livesText = new Text("Lives: "+Integer.toString(lives));
         livesText.setFill(Color.rgb(255,255,255));
         timer = new Timer(true);
@@ -129,7 +126,7 @@ public class GameSI extends Group {
         this.setUpBarriers();
         this.pause();
         this.translationSetup();
-        this.setUpVariables();
+        
     }
 
     /**
@@ -144,12 +141,15 @@ public class GameSI extends Group {
     
         lives = 3;
         gameOver = new ImageView(new Image("spaceInv/gameover.png"));
+        
+        gameOver.setOpacity(0);
         hurt = false;
         this.application = application;
         noBullet = true;
         level = 1;
         rand = new Random();
         scoreText = new Text("Score: "+Integer.toString(score));
+        scoreText.setFill(Color.rgb(255,255,255));
     }
 
     /**
