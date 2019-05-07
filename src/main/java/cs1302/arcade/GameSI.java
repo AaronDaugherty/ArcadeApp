@@ -30,7 +30,7 @@ import javafx.scene.text.Text;
 import java.util.Random;
 
 /**
- *
+ *Represents a game of SpaceInvaders.
  *
  */
 public class GameSI extends Group {
@@ -82,6 +82,10 @@ public class GameSI extends Group {
     Text livesText;
     ImageView gameOver;
     
+    /**
+     *Constructor for GameSI class. Constructs a game of SpaceInvaders.
+     *
+     */
     public GameSI(ArcadeApp application) {
 	lives = 3;
 	gameOver = new ImageView(new Image("spaceInv/gameover.png"));
@@ -118,7 +122,8 @@ public class GameSI extends Group {
 	
 	
 	
-	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText,livesText,gameOver);
+	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText,
+                              livesText,gameOver);
 	this.setUpAlienShoot();
 
 
@@ -190,7 +195,11 @@ public class GameSI extends Group {
 	this.pause();
     }
 
-    public EventHandler<ActionEvent> createLaserShoot(int i) {
+    /**
+     *
+     *
+     */
+    EventHandler<ActionEvent> createLaserShoot(int i) {
 	EventHandler<ActionEvent> event = e -> {
 	    lasers.get(i).setTranslateY(lasers.get(i).getTranslateY()+10);
 	    if(lasers.get(i).getTranslateY() < -500) {
@@ -230,7 +239,10 @@ public class GameSI extends Group {
     }
 
     
-
+    /**
+     *Sets up shooting for aliens. Creates timelines for each laser
+     *and sets up animation.
+     */
     public void setUpAlienShoot() {
 	alienShootTime = new Timeline();
 	alienShootTime.getKeyFrames().add(new KeyFrame(Duration.seconds(.03), e-> System.out.println("TEST")));
@@ -260,6 +272,11 @@ public class GameSI extends Group {
 	}
     }
 
+    /**
+     *Spawns alien laser in the correct location and plays
+     *timeline for laser. 
+     *@param An Alien onject
+     */
     public void shootAlien(Alien alien) {
 	alien.getLaser().setTranslateX(alien.getTranslateX()-alien.getXDist());
 	alien.getLaser().setTranslateY(alien.getTranslateY()-alien.getYDist());
@@ -272,6 +289,11 @@ public class GameSI extends Group {
 	alienLaserTimes.get(laserNum).play();
     }
 
+    /**
+     *Determines if the alien can shoot and adds it to a list.
+     *Enables random shooting by having an alien fire every time 5
+     *is chosen randomly out of 20.
+     */
     public void alienShoot() {
 	shootAliens = new LinkedList<Alien>();
 	for(Alien alien: aliens) {
