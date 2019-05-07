@@ -87,11 +87,19 @@ public class GameSI extends Group {
 	joystick.setTranslateX(580);
 	joystick.setTranslateY(580);
 	this.setUpLevel();
+
+    
 	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText);
-        menu = new ArcButton(0,0,new Image("spaceInv/mainMenu.png"), e -> {
+
+        //Main Menu button for SpaceInvaders
+    menu = new ArcButton(0,0,new Image("spaceInv/mainMenu.png"), e -> {
 		application.setScene(application.getScene());
 		this.pause();
 	});
+        menu.setTranslateX(175);
+        menu.setTranslateY(50);
+        
+        //Restart button for SpaceInvaders    
 	reset = new ArcButton(100,0,new Image("spaceInv/restart.png"), e -> {
 		score = 0;
 		scoreText.setText("Score: "+Integer.toString(score));
@@ -105,10 +113,11 @@ public class GameSI extends Group {
 		    alien.setTranslateY(0);
 		    alien.setDead(false);
 		}
+        reset.setTranslateX(750);
 		this.setLevel(1);
 		this.level();
 	});
-	quit = new ArcButton(200, 0, new Image("2048/MainMenu.png"), e-> {
+	quit = new ArcButton(200, 0, new Image("spaceInv/exit.png"), e-> {
 		timer.cancel();
 		timer.purge();
 		laserTime.stop();
