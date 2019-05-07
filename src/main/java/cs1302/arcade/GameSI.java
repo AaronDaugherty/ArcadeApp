@@ -75,10 +75,12 @@ public class GameSI extends Group {
     int score;
     int lives;
     Text livesText;
-    
+    ImageView gameOver;
     
     public GameSI(ArcadeApp application) {
 	lives = 3;
+	gameOver = new ImageView(new Image("spaceInv/gameover.png"));
+	gameOver.setOpacity(0);
 	hurt = false;
 	this.application = application;
 	noBullet = true;
@@ -110,7 +112,7 @@ public class GameSI extends Group {
 	
 	
 	
-	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText,livesText);
+	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText,livesText,gameOver);
 	this.setUpAlienShoot();
 
 
@@ -124,6 +126,7 @@ public class GameSI extends Group {
         
         //Restart button for SpaceInvaders    
 	reset = new ArcButton(100,0,new Image("spaceInv/restart.png"), e -> {
+		gameOver.setOpacity(0);
 		hurt = false;
 		lives = 3;
 		livesText.setText("Lives: "+Integer.toString(lives));
@@ -350,6 +353,9 @@ public class GameSI extends Group {
 	animTime.pause();
 	playerTimeR.pause();
 	playerTimeL.pause();
+	for(Timeline timeline: alienLaserTimes) {
+	    timeline.pause();
+	}
     }
     
 
@@ -357,6 +363,9 @@ public class GameSI extends Group {
 	this.level();
 	TimerTask levelTask = new TimerTask() {
 		public void run() {
+		    for(Timeline timeline: alienLaserTimes) {
+			timeline.play();
+		    }
 		    alienTime.play();
 		    animTime.play();
 		    level1.setOpacity(0);
@@ -681,7 +690,8 @@ public class GameSI extends Group {
     }
 
     public void gameOver() {
-	System.out.println("Game Over");
+	this.pause();
+	gameOver.setOpacity(1);
     }
     
 }
