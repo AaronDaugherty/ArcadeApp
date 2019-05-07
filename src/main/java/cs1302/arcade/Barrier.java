@@ -45,8 +45,8 @@ public class Barrier extends Rectangle {
         if(dmg == 4) {
             this.setFill(barrier4);
         }
-        else {
-            
+        if(dmg == 5) {
+            this.setTranslateX(5000);
         }
     }
 

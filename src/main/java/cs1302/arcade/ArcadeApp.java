@@ -57,8 +57,10 @@ public class ArcadeApp extends Application {
         Game2048 game2048 = new Game2048(this);
         GameSI gameSI = new GameSI(this);
         Button bntSI = new Button();
-	ArcButton bntQuit = new ArcButton(0,0,new Image("2048/exit.png"),
+	    ArcButton bntQuit = new ArcButton(0,0,new Image("spaceInv/exit.png"),
 					  e -> gameSI.getQuit().fire());
+        bntQuit.setTranslateY(150);
+        bntQuit.setTranslateX(400);
         //Creating 2048 box
         ImageView start2048nm = new ImageView(new Image("2048/2048GreyStart.png"));
         ImageView start2048wm = new ImageView(new Image("2048/2048RedStart.png"));
@@ -69,7 +71,7 @@ public class ArcadeApp extends Application {
         bnt2048.setOnMouseEntered(e -> bnt2048.setGraphic(start2048wm));
         bnt2048.setOnMouseExited(e -> bnt2048.setGraphic(start2048nm));
 	
-        sp2048.getChildren().addAll(bnt2048,bntQuit);
+        sp2048.getChildren().addAll(bnt2048);
         sp2048.setAlignment(bnt2048,Pos.BOTTOM_CENTER);
         bnt2048.setTranslateY(-40);
         
@@ -83,7 +85,7 @@ public class ArcadeApp extends Application {
         bntSI.setGraphic(startSI);
         bntSI.setPadding(Insets.EMPTY);
         bntSI.setTranslateY(120);
-        spInvaders.getChildren().addAll(logo,bntSI);
+        spInvaders.getChildren().addAll(logo,bntSI,bntQuit);
 
         group.setOnMouseClicked(createMouseHandler());
         vbox.getChildren().addAll(sp2048, spInvaders);
