@@ -36,8 +36,10 @@ public class GameSI extends Group {
     Rectangle nebula;
     Rectangle joystick;
     LinkedList<Alien> aliens;
+    LinkedList<Barrier> barriers;
     ArcButton menu;
     ArcButton reset;
+    ArcButton quit;
     StackPane game;
     boolean noBullet;
     Rectangle laser;
@@ -60,6 +62,7 @@ public class GameSI extends Group {
     boolean paused;
     Text scoreText;
     int score;
+    
     
     public GameSI(ArcadeApp application) {
     this.application = application;
@@ -105,6 +108,18 @@ public class GameSI extends Group {
 		this.setLevel(1);
 		this.level();
 	});
+	quit = new ArcButton(200, 0, new Image("2048/MainMenu.png"), e-> {
+		timer.cancel();
+		timer.purge();
+		laserTime.stop();
+		alienTime.stop();
+		animTime.stop();
+		playerTimeR.stop();
+		playerTimeL.stop();
+		System.exit(0);
+		
+	});
+       
 	anim = 1;
 	alienDirection = 0;
 	rightBound = new Rectangle(1,500,Color.BLUE);
@@ -112,10 +127,10 @@ public class GameSI extends Group {
 	leftBound = new Rectangle(1,500,Color.BLUE);
 	leftBound.setTranslateX(0);
 	game.getChildren().add(rightBound);
-	this.getChildren().addAll(frame,menu,reset,game,nebula,joystick);
+	this.getChildren().addAll(frame,menu,reset,quit,game,nebula,joystick);
 	noBullet = true;
 	this.setUpAnimations();
-    this.setUpBarriers();
+	this.setUpBarriers();
 	this.pause();
     }
 
@@ -319,7 +334,7 @@ public class GameSI extends Group {
 		    if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
 			noBullet = true;
 			alien.setTranslateX(5000);
-			laser.setTranslateX(1000);
+			laser.setTranslateX(-1000);
 			alien.setDead(true);
 			if(alien.getType() == 1) {
 			    score+= 100;
@@ -331,6 +346,13 @@ public class GameSI extends Group {
 			scoreText.setText("Score: "+Integer.toString(score));
 			
 		    }
+		}
+	    }
+	    for(Barrier barrier: barriers) {
+		if(laser.getBoundsInParent().intersects(barrier.getBoundsInParent())) {
+		    noBullet = true;
+		    laser.setTranslateX(-1000);
+		    barrier.setDmgLvl(barrier.getDmgLvl()+1);
 		}
 	    }
 	    if(laser.getTranslateY() < -250) {
@@ -440,6 +462,7 @@ public class GameSI extends Group {
     }
 
     public void setUpBarriers() {
+	barriers = new LinkedList<Barrier>();
         Barrier b1 = new Barrier();
         Barrier b2 = new Barrier();
         Barrier b3 = new Barrier();
@@ -455,7 +478,10 @@ public class GameSI extends Group {
         b3.setTranslateX(100);
         b4.setTranslateY(150);
         b4.setTranslateX(250);
-        
-        game.getChildren().addAll(b1,b2,b3,b4);
+	game.getChildren().addAll(b1,b2,b3,b4);
+        barriers.add(b1);
+	barriers.add(b2);
+	barriers.add(b3);
+	barriers.add(b4);
     }
 }

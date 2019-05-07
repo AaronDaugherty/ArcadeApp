@@ -6,43 +6,47 @@ import javafx.scene.paint.ImagePattern;
 
 public class Barrier extends Rectangle {
 
-    private final Image barrier1 = new Image("spaceInv/barrier1.png");
-    private final Image barrier2 = new Image("spaceInv/barrier2.png");
-    private final Image barrier3 = new Image("spaceInv/barrier3.png");
-    private final Image barrier4 = new Image("spaceInv/barrier4.png");
+    private final ImagePattern barrier1 = new ImagePattern(new Image("spaceInv/barrier1.png"));
+    private final ImagePattern barrier2 = new ImagePattern(new Image("spaceInv/barrier2.png"));
+    private final ImagePattern barrier3 = new ImagePattern(new Image("spaceInv/barrier3.png"));
+    private final ImagePattern barrier4 = new ImagePattern(new Image("spaceInv/barrier4.png"));
 
     private int dmgLvl;
     private int width;
     private int height;
 
-    public Barrier(Image image, int length, int width){
-        super(length, width, new ImagePattern(image));
+    public Barrier(int length, int width){
+        super(length, width);
+	this.setFill(barrier1);
         this.width = width;
         this.height = height;
+	this.setDmgLvl(1);
     }
 
     public Barrier() {
-        super(30, 30, new ImagePattern(new Image("spaceInv/barrier1.png")));
+        super(30, 30);
+	this.setFill(barrier1);
         this.width = 30;
         this.height = 30;
+	this.setDmgLvl(1);
     }
 
     public void setDmgLvl(int dmg) {
         this.dmgLvl = dmg;
         if(dmg == 1) {
-            this.setFill(new ImagePattern(barrier1)); 
-    }
+            this.setFill(barrier1); 
+	}
         if(dmg == 2) {
-            this.setFill(new ImagePattern(barrier2));
+            this.setFill(barrier2);
         }
         if(dmg == 3) {
-            this.setFill(new ImagePattern(barrier3));
+            this.setFill(barrier3);
         }
         if(dmg == 4) {
-            this.setFill(new ImagePattern(barrier4));
+            this.setFill(barrier4);
         }
         else {
-            System.out.println("ERROR: Not a valid damage value");
+            
         }
     }
 
