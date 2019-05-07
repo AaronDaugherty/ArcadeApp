@@ -119,14 +119,13 @@ public class GameSI extends Group {
         alienDirection = 0;
         rightBound = new Rectangle(1,500,Color.BLUE);
         leftBound = new Rectangle(1,500,Color.BLUE);
-        game.getChildren().add(rightBound);
+        game.getChildren().addAll(leftBound,rightBound);
         this.getChildren().addAll(frame,menu,reset,quit,game,nebula,joystick);
         noBullet = true;
         this.setUpAnimations();
         this.setUpBarriers();
         this.pause();
         this.translationSetup();
-        
     }
 
     /**
@@ -160,7 +159,7 @@ public class GameSI extends Group {
         scoreText.setTranslateY(-225);
         scoreText.setTranslateX(-100);
         ship.setTranslateY(200);
-        leftBound.setTranslateX(0);
+        leftBound.setTranslateX(-350);
         rightBound.setTranslateX(350);
         menu.setTranslateX(200);
         menu.setTranslateY(50);
@@ -554,34 +553,34 @@ public class GameSI extends Group {
         EventHandler<ActionEvent> event = e -> {
             switch (alienDirection) {
             case 0:
-            for(Alien alien: aliens) {
-                if(alien.getBoundsInParent().intersects(rightBound.getBoundsInParent())) {
-                    alienDirection = 1;
-                    for(Alien alien2: aliens) {
-                        alien2.setTranslateY(alien2.getTranslateY() + 16);
+                for(Alien alien: aliens) {
+                    if(alien.getBoundsInParent().intersects(rightBound.getBoundsInParent())) {
+                        alienDirection = 1;
+                        for(Alien alien2: aliens) {
+                            alien2.setTranslateY(alien2.getTranslateY() + 16);
+                        }
+                        break;
                     }
-                    break;
+                    alien.setTranslateX(alien.getTranslateX() + 1);
                 }
-                alien.setTranslateX(alien.getTranslateX() + 1);
-            }
-            break;
+                break;
             case 1:
-            for(Alien alien: aliens) {
-                if(alien.getBoundsInParent().intersects(leftBound.getBoundsInParent())) {
-                    alienDirection = 0;
-                    for(Alien alien2: aliens) {
-                        alien2.setTranslateY(alien2.getTranslateY() + 16);
+                for(Alien alien: aliens) {
+                    if(alien.getBoundsInParent().intersects(leftBound.getBoundsInParent())) {
+                        alienDirection = 0;
+                        for(Alien alien2: aliens) {
+                            alien2.setTranslateY(alien2.getTranslateY() + 16);
+                        }
+                        break;
                     }
-                    break;
+                    alien.setTranslateX(alien.getTranslateX() - 1);
                 }
-                alien.setTranslateX(alien.getTranslateX() - 1);
+                break;
             }
             for(Alien alien: aliens) {
-                if(alien.getTranslateY() <= ship.getTranslateY()) {
+                if(alien.getTranslateY() >= 200) {
                     this.gameOver();
                 }
-            }
-            break;
             }
             boolean nextLevel = true;
             for(Alien alien: aliens) {
