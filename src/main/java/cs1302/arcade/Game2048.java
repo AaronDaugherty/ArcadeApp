@@ -62,13 +62,17 @@ public class Game2048 extends Group{
         this.setOnKeyPressed(createKeyHandler());
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
-        mmButton = new ArcButton(-300, 25,new Image("2048/MainMenu.png"),
+        //Main Menu Button
+        mmButton = new ArcButton(-300, 25,new Image("2048/MainMenu.png")
                                  e -> application.setScene(application.getScene()));
+        //New Game Button
         ngButton = new ArcButton(0,0,new Image("2048/NewGame.png"),
                                  e -> this.newGame());
-	exitButton = new ArcButton(300,-25, new Image("2048/exit.png"),
+        //Exit Button
+    	exitButton = new ArcButton(300,-25, new Image("2048/exit.png"),
 				   e -> application.getGameSI().getQuit().fire());
-	this.setUpScoreAndGameOver();
+        
+	    this.setUpScoreAndGameOver();
         vbox.getChildren().addAll(mmButton,ngButton,exitButton,scorevbox,hbox);
         ngButton.setOnAction(e->this.newGame());
         background = new ImageView(new Image("2048/GameBackground.png"));
@@ -94,6 +98,7 @@ public class Game2048 extends Group{
         win = new Text("You Win!");
         win.setFill(Color.rgb(10,71,18));
         win.setOpacity(0);
+        //Adding wood font.
         try {
             String path = "src/main/resources/2048/JFWilwod.ttf";
             FileInputStream fp = new FileInputStream(path);
@@ -134,6 +139,7 @@ public class Game2048 extends Group{
         pane.setMaxSize(560, 560);
         pane.setTranslateX(232);
         tiles = new Tile2048[4][4];
+        //Adds each tile to pane
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k < 4; k++) {
                 tiles[i][k] = new Tile2048(this);
@@ -147,6 +153,7 @@ public class Game2048 extends Group{
      *and then respawns starter tiles.
      */
     public void newGame() {
+        //Setting to empty
         for(int i=0;i<4;i++) {
             for(int k=0;k<4;k++) {
                 tiles[i][k].setEmpty(true);
@@ -170,6 +177,7 @@ public class Game2048 extends Group{
      */
     public void spawnTile() {
         ArrayList<Tile2048> emptyImgs = new ArrayList<>();
+        //
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4; k++) {
                 if(tiles[i][k].isEmpty()) {
