@@ -50,12 +50,16 @@ public class ArcadeApp extends Application {
 
     /**
      * Returns the current scene object.
-     * @returns The current scene object
+     * @return The current scene object
      */
     public Scene getScene() {
         return scene;
     }//getScene
 
+    /**
+     *Returns a game of SpaceInvaders.
+     *@return GameSI SpaceInvaders game
+     */
     public GameSI getGameSI() {
 	return gameSI;
     }
