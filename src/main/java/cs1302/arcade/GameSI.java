@@ -92,7 +92,7 @@ public class GameSI extends Group {
 	game.getChildren().addAll(space,aliensvbox,laser,ship,level1,level2,level3,scoreText);
 
         //Main Menu button for SpaceInvaders
-    menu = new ArcButton(0,0,new Image("spaceInv/mainMenu.png"), e -> {
+	menu = new ArcButton(0,0,new Image("spaceInv/mainMenu.png"), e -> {
 		application.setScene(application.getScene());
 		this.pause();
 	});
@@ -107,7 +107,7 @@ public class GameSI extends Group {
 		menu.setDisable(true);
 		alienDirection = 0;
 		ship.setTranslateX(0);
-		laser.setTranslateY(-2000);
+		laser.setTranslateY(2000);
 		for(Alien alien: aliens) {
 		    alien.setTranslateX(0);
 		    alien.setTranslateY(0);
@@ -215,9 +215,13 @@ public class GameSI extends Group {
 		    level2.setOpacity(0);
 		    level3.setOpacity(0);
 		    paused = false;
+		    noBullet = true;
 		    reset.setDisable(false);
 		    menu.setDisable(false);
 		    cancel();
+		    if(laser.getTranslateY() > -250 && laser.getTranslateY() < 250) {
+			laserTime.play();
+		    }
 		}
 	    };
 	timer.schedule(levelTask,2000);
@@ -347,7 +351,7 @@ public class GameSI extends Group {
 		    if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
 			noBullet = true;
 			alien.setTranslateX(5000);
-			laser.setTranslateX(-1000);
+			laser.setTranslateX(1000);
 			alien.setDead(true);
 			if(alien.getType() == 1) {
 			    score+= 100;
@@ -364,22 +368,21 @@ public class GameSI extends Group {
 	    for(Barrier barrier: barriers) {
 		if(laser.getBoundsInParent().intersects(barrier.getBoundsInParent())) {
 		    noBullet = true;
-		    laser.setTranslateX(-1000);
+		    laser.setTranslateX(1000);
 		    barrier.setDmgLvl(barrier.getDmgLvl()+1);
 		}
 	    }
 	    if(laser.getTranslateY() < -250) {
 	    noBullet = true;
-	    laserTime.pause();
 	    laser.setTranslateY(1000);
 	    }
 	};
 	KeyFrame laserKey = new KeyFrame(Duration.seconds(.02), laserHandler);
         laserTime = new Timeline();
-	laser.setTranslateY(-1000);
+	laser.setTranslateY(1000);
         laserTime.setCycleCount(Timeline.INDEFINITE);
         laserTime.getKeyFrames().add(laserKey);
-        laserTime.play();
+        //laserTime.play();
 
     }
 
