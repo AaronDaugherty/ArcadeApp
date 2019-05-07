@@ -134,6 +134,10 @@ public class GameSI extends Group {
 	this.pause();
     }
 
+    public ArcButton getQuit() {
+	return quit;
+    }
+
     public ArcButton getReset() {
 	return reset;
     }
