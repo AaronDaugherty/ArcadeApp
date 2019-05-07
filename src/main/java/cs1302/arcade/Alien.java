@@ -28,9 +28,9 @@ public class Alien extends Rectangle {
      */
     public Alien(Image image, int length, int width, int type) {
         super(length,width, new ImagePattern(image));
-	this.type = type;
-	isDead = false;
-	canShoot = false;
+    this.type = type;
+    isDead = false;
+    canShoot = false;
     }
 
     /**
@@ -38,7 +38,7 @@ public class Alien extends Rectangle {
      *@return type an int represnting alien type
      */
     public int getType() {
-	return type;
+    return type;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Alien extends Rectangle {
      *@param boolean if dead, true, if alive, false
      */
     public void setDead(boolean dead) {
-	this.isDead = dead;
+    this.isDead = dead;
     }
 
     /**
@@ -54,7 +54,7 @@ public class Alien extends Rectangle {
      *@return boolean true if dead, false if alive
      */
     public boolean isDead() {
-	return isDead;
+    return isDead;
     }
 
     /**
@@ -62,7 +62,7 @@ public class Alien extends Rectangle {
      *@param int xDist Distance to transform alien in X plane
      */
     public void setXDist(int xDist) {
-	this.xDist = xDist;
+    this.xDist = xDist;
     }
 
     /**
@@ -70,7 +70,7 @@ public class Alien extends Rectangle {
      *@return XDist an int representing distance transformed in X plane
      */
     public int getXDist() {
-	return xDist;
+    return xDist;
     }
 
   /**
@@ -78,7 +78,7 @@ public class Alien extends Rectangle {
     *@param int YDist Distance to transform alien in Y plane
     */
     public void setYDist(int yDist) {
-	this.yDist = yDist;
+    this.yDist = yDist;
     }
 
    /**
@@ -86,7 +86,7 @@ public class Alien extends Rectangle {
     *@return YDist an int representing distance transformed in Y plane
     */
     public int getYDist() {
-	return yDist;
+    return yDist;
     }
 
     /**
@@ -94,19 +94,19 @@ public class Alien extends Rectangle {
      *
      */
     public void setCanShoot(boolean canShoot) {
-	this.canShoot = canShoot;
+    this.canShoot = canShoot;
     }
 
     public boolean getCanShoot() {
-	return canShoot;
+    return canShoot;
     }
 
     public void addLaser(Rectangle laser) {
-	this.laser = laser;
+    this.laser = laser;
     }
 
     public Rectangle getLaser() {
-	return laser;
+    return laser;
     }
 
 }

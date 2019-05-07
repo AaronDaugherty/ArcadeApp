@@ -68,10 +68,10 @@ public class Game2048 extends Group{
         ngButton = new ArcButton(0,0,new Image("2048/NewGame.png"),
                                  e -> this.newGame());
         //Exit Button
-    	exitButton = new ArcButton(300,-25, new Image("2048/exit.png"),
-				   e -> application.getGameSI().getQuit().fire());
+        exitButton = new ArcButton(300,-25, new Image("2048/exit.png"),
+                   e -> application.getGameSI().getQuit().fire());
         
-	    this.setUpScoreAndGameOver();
+        this.setUpScoreAndGameOver();
         vbox.getChildren().addAll(mmButton,ngButton,exitButton,scorevbox,hbox);
         ngButton.setOnAction(e->this.newGame());
         background = new ImageView(new Image("2048/GameBackground.png"));
