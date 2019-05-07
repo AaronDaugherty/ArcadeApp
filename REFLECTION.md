@@ -4,6 +4,13 @@ Add to this file to satisfy the "Reflection Updates" non-functional requirement
 for this project. Please keep this document organized using Markdown. If you
 click on this file in your team's GitHub repository website, then you will see
 that the Markdown is transformed into nice looking HTML.
+
+## TUE 2019-05-07 @ 2:57 PM EST
+
+1. **DONE:** Completed 2048 and SpaceInvaders.
+2. **TODO:** Get an A
+3. **PROB:** Easy Peasy lemon squeazy. Only thing was the aliens in SpaceInvaders were originally in a Vbox, which
+    caused a lot of problems, but we fixed it.
     
 ## TUE 2019-04-23 @ 11:15 AM EST
     

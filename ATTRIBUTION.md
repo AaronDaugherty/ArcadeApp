@@ -54,3 +54,9 @@ authored by members of your project team.
 * Shutterstock. "Colorful Buttons and Joystick Set"
 * https://www.shutterstock.com/image-vector/colorful-buttons-joysticks-set-arcade-machine-1186137418
 * Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+
+## You Win
+* src/main/resources/spaceInv/youwin.png
+* PixelArtMaker. "You Win"
+* http://pixelartmaker.com/art/f3eea3bc11276ff
+* Creative Commons Attribution 3.0 Unported (CC BY 3.0)

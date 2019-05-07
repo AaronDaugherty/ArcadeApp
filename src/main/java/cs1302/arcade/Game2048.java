@@ -23,7 +23,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.effect.ColorInput;
 /**
  *Represents a game of 2048.
- *
  */
 public class Game2048 extends Group{
 
@@ -63,7 +62,7 @@ public class Game2048 extends Group{
         vbox.setAlignment(Pos.CENTER);
         rand = new Random();
         //Main Menu Button
-        mmButton = new ArcButton(-300, 25,new Image("2048/MainMenu.png")
+        mmButton = new ArcButton(-300, 25,new Image("2048/MainMenu.png"),
                                  e -> application.setScene(application.getScene()));
         //New Game Button
         ngButton = new ArcButton(0,0,new Image("2048/NewGame.png"),
@@ -177,7 +176,7 @@ public class Game2048 extends Group{
      */
     public void spawnTile() {
         ArrayList<Tile2048> emptyImgs = new ArrayList<>();
-        //
+        //Adding empty images
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4; k++) {
                 if(tiles[i][k].isEmpty()) {
@@ -185,6 +184,7 @@ public class Game2048 extends Group{
                 }
             }
         }
+        //Spawning random tiles
         if(emptyImgs.size() > 0) {
             int index = rand.nextInt(emptyImgs.size());
             int number = rand.nextInt(9);
@@ -227,6 +227,7 @@ public class Game2048 extends Group{
      *to 0.5, creating a fade effect on the screen.
      */
     public void win() {
+        //Fade effect
         GOBackground.setOpacity(.5);
         win.setOpacity(1);
         isWin = true;
@@ -237,6 +238,7 @@ public class Game2048 extends Group{
      *
      */
     public void setImages() {
+        //Setting images based on URLS
         for(int i = 0; i < 4; i++) {
             for (int k = 0; k< 4; k++) {
                 tiles[i][k].setImage(new Image(tiles[i][k].getUrl()));
@@ -265,6 +267,7 @@ public class Game2048 extends Group{
      */
     public void shiftLeft() {
         int counter = 0;
+        //Checking for movability
         for(int i = 0; i < 4; i++) {
             for(int k = 0; k<4;k++) {
                 for(int j = k; j > 0; j--) {

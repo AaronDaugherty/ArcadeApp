@@ -189,13 +189,16 @@ public class GameSI extends Group {
         alienDirection = 0;
         ship.setTranslateX(0);
         laser.setTranslateY(2000);
+        //ressurecting all aliens
         for(int i = 0; i < 50; i++) {
             aliens.get(i).setDead(false);
             
         }
+        //Disbaling shooting for aliens
         for(Alien alien: aliens) {
             alien.setCanShoot(false);
         }
+        //Enabling shooting for first row aliens
         for(int i = 0; i < 10; i++) {
             aliens.get(i).setCanShoot(true);
         }
@@ -242,6 +245,7 @@ public class GameSI extends Group {
                 lasers.get(i).setTranslateY(1000);
                 alienLaserTimes.get(i).pause();
             }
+            //Ship death
             if(lasers.get(i).getBoundsInParent().intersects(ship.getBoundsInParent())&&!hurt) {
                 lives = lives -1;
                 livesText.setText("Lives: "+Integer.toString(lives)); 
@@ -264,6 +268,7 @@ public class GameSI extends Group {
             
                 }
             }
+            //Barrier hit
             for(Barrier barrier: barriers) {
                 if(lasers.get(i).getBoundsInParent().intersects(barrier.getBoundsInParent())) {
                     lasers.get(i).setTranslateY(-1000);
@@ -285,11 +290,13 @@ public class GameSI extends Group {
                                                        e-> System.out.println("TEST")));
         lasers = new LinkedList<Rectangle>();
         Rectangle laser = new Rectangle(8,16,alienLsrImg);
+        //Setting up alien lasers
         for(int i = 0; i < 10; i++) {
             laser = new Rectangle(8,16,alienLsrImg);
             lasers.add(laser);
             game.getChildren().add(laser);
             laser.setTranslateX(1000);
+            //Setting shooting for shooty aliens
             for(int k = 0; k < 5; k++) {
                 if(k == 0) {
                     aliens.get(i).setCanShoot(true);
@@ -297,12 +304,15 @@ public class GameSI extends Group {
                 aliens.get(((10*k)+i)).addLaser(laser);
             }
         }
+        //Timeline list for alien lasers
         alienLaserTimes = new LinkedList<Timeline>();
+        //Adding laser timelines to list
         for(int i = 0; i < 10; i++) {
             Timeline timeline = new Timeline();
             timeline.setCycleCount(Timeline.INDEFINITE);
             alienLaserTimes.add(timeline);
         }
+        //Shooting for first row aliens
         for(int i = 0; i < 10; i++) {
             KeyFrame alienShootKey2 = new KeyFrame(Duration.seconds(.03),this.createLaserShoot(i));
             alienLaserTimes.get(i).getKeyFrames().add(alienShootKey2);
@@ -329,6 +339,7 @@ public class GameSI extends Group {
      */
     public void alienShoot() {
         shootAliens = new LinkedList<Alien>();
+        //Adding new aliens to list of shooty aliens
         for(Alien alien: aliens) {
             if(alien.getCanShoot()) {
                 shootAliens.add(alien);
@@ -457,6 +468,7 @@ public class GameSI extends Group {
         this.level();
         TimerTask levelTask = new TimerTask() {
                 public void run() {
+                    //Plays timelines
                     for(Timeline timeline: alienLaserTimes) {
                         timeline.play();
                     }
@@ -469,7 +481,7 @@ public class GameSI extends Group {
                     noBullet = true;
                     reset.setDisable(false);
                     menu.setDisable(false);
-                    //cancel();
+                    //cancel
                     if(laser.getTranslateY() > -250 && laser.getTranslateY() < 250) {
                         laserTime.play();
                     }
@@ -513,6 +525,7 @@ public class GameSI extends Group {
      */
     private void setUpAliens() {
         aliens = new LinkedList<Alien>();
+        //Setting up locations of aliens 1
         for(int i = 0; i < 20; i++) {
             aliens.add(new Alien(new Image("spaceInv/alien1open.png"),32,32,1));
             if(i < 10) {
@@ -523,6 +536,7 @@ public class GameSI extends Group {
                 aliens.get(i).setXDist(i/2*32);
             }
         }
+        //setting up locations aliens 2
         for(int i = aliens.size(); i < 40; i++) {
             aliens.add(new Alien(new Image("spaceInv/alien2open.png"),32,32,2));
             if(i<30) {
@@ -533,6 +547,7 @@ public class GameSI extends Group {
                 aliens.get(i).setXDist(i/4*32);
             }
         }
+        //Setting up locations for aliens 3
         for(int i = aliens.size(); i < 50; i++) {
             aliens.add(new Alien(new Image("spaceInv/alien3open.png"),32,32,3));
             aliens.get(i).setYDist(32);
@@ -599,6 +614,7 @@ public class GameSI extends Group {
     private void setUpAnimations() {
         EventHandler<ActionEvent> animHandler = event -> {
             if(anim == 0) {
+                //Animations for aliens
                 for(Alien alien: aliens) {
                     if(alien.getType() == 1) {
                         alien.setFill(new ImagePattern(new Image("spaceInv/alien1closed.png")));
@@ -622,7 +638,7 @@ public class GameSI extends Group {
                 anim = 0;
             }
         
-        };
+        };// animHandler
         KeyFrame animKey = new KeyFrame(Duration.seconds(1),animHandler);
         animTime = new Timeline();
         animTime.setCycleCount(Timeline.INDEFINITE);
@@ -637,6 +653,7 @@ public class GameSI extends Group {
     public EventHandler<ActionEvent> createLaserHandler() {
         EventHandler<ActionEvent> event = e -> {
             laser.setTranslateY(laser.getTranslateY()-10);
+            //Collision for lasers
             for(Alien alien: aliens) {
                 if(laser.getBoundsInParent().intersects(alien.getBoundsInParent())) {
                     noBullet = true;
@@ -663,6 +680,7 @@ public class GameSI extends Group {
             
                 }
             }
+            //Barrier collision
             for(Barrier barrier: barriers) {
                 if(laser.getBoundsInParent().intersects(barrier.getBoundsInParent())) {
                     noBullet = true;
@@ -699,6 +717,7 @@ public class GameSI extends Group {
             this.pause();
             level1.setOpacity(1);
         } else if(this.getLevel() ==2) {
+            //Setting up lvl 2 aliens
             for(int i = 0; i < 50; i++) {
                 aliens.get(i).setDead(false);
                 if(i < 10) {
@@ -862,6 +881,7 @@ public class GameSI extends Group {
      */
     public void setUpBarriers() {
         barriers = new LinkedList<Barrier>();
+        //Adding barreirs to barrier list
         for(int i = 0; i < 16; i++) {
             Barrier barrier = new Barrier();
             barriers.add(barrier);
