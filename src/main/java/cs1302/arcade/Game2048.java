@@ -240,8 +240,7 @@ public class Game2048 extends Group{
     /**
      *Determines if a tile can move left by checking if it is not empty, is 
      *not on the edge, and the tile to its left has not already merged.
-     *@param i first index in 2d array
-     *@param j second index in 2d array
+     *@param i first index in 2d array, j second index in 2d array
      */
     public boolean canGoLeft(int i, int j) {
         if(j < 1 || tiles[i][j].isEmpty() || tiles[i][j-1].hasMerged()) {
@@ -286,8 +285,8 @@ public class Game2048 extends Group{
     /**
      *Determines if a tile can move right by checking if it is not empty, is 
      *not on the edge, and the tile to its right has not already merged.
-     *@param i first index in 2d array
-     *@param j second index in 2d array
+     *@param i first index in 2d array, j second index in 2d array
+     *
      */
     public boolean canGoRight(int i, int j) {
         if(j > 2 || tiles[i][j].isEmpty() || tiles[i][j+1].hasMerged()) {
@@ -296,7 +295,7 @@ public class Game2048 extends Group{
         return tiles[i][j+1].equals(tiles[i][j]);
 
     }
-        /**
+   /**
      *Loops through a 2d array of tiles and checks each one for
      *the ability to move right, shifts right each tile that is able
      *and merges tiles who are able to be merged.
@@ -334,8 +333,8 @@ public class Game2048 extends Group{
     /**
      *Determines if a tile can move up by checking if it is not empty, is 
      *not on the edge, and the tile above it has not already merged.
-     *@param i first index in 2d array
-     *@param j second index in 2d array
+     *@param i first index in 2d array, j second index in 2d array
+     *@return boolean true or false
      */
     public boolean canGoUp(int j, int k) {
         if(j < 1 || tiles[j][k].isEmpty() || tiles[j-1][k].hasMerged()) {
@@ -344,7 +343,7 @@ public class Game2048 extends Group{
         return tiles[j][k].equals(tiles[j-1][k]);
     }
 
-        /**
+   /**
      *Loops through a 2d array of tiles and checks each one for
      *the ability to move up, shifts up each tile that is able
      *and merges tiles who are able to be merged.
@@ -379,11 +378,11 @@ public class Game2048 extends Group{
     }
 
     
-    /**
+   /**
      *Determines if a tile can move down by checking if it is not empty, is 
      *not on the edge, and the tile below it has not already merged.
-     *@param i first index in 2d array
-     *@param j second index in 2d array
+     *@param i first index in 2d array, j second index in 2d array  
+     *@returns boolean true or false
      */
     public boolean canGoDown(int j, int k) {
         if(j > 2 || tiles[j][k].isEmpty() || tiles[j+1][k].hasMerged()) {
@@ -426,8 +425,9 @@ public class Game2048 extends Group{
 
     /**
      *Loops through a 2d array of tiles to check if
-     *every space is occupied.
-     *@returns boolean False if not full, true if full
+     *every space is occupied. Returns true if board is full,
+     *and false if it is not.
+     *@return boolean True or false
      */
     public boolean isFull() {
         for(int i =0; i < 4; i++) {
@@ -443,6 +443,7 @@ public class Game2048 extends Group{
     /**
      *Loops through tiles array and checks if any tiles can move in
      *any direction. If not, returns true, otherwise returns false.
+     *@return boolean true or false.
      */
     public boolean isGameOver() {
         for(int i = 0; i < 4; i++) {
@@ -455,17 +456,28 @@ public class Game2048 extends Group{
         return true;
     }
     
-
+    /**
+     *Displays Game Over text and fades background.
+     *
+     */
     public void gameOver() {
         gameOver.setOpacity(1);
         GOBackground.setOpacity(.5);
     }
-
+    /**
+     *Sets the score variable to the given score and
+     *sets the score text to display the proper score value
+     *@param int score
+     */
     public void setScore(int score) {
         this.score = score;
         this.scoreNumText.setText(Integer.toString(score));
     }
 
+    /**
+     *Returns the current game score.
+     *@return int score
+     */
     public int getScore() {
         return score;
     }
