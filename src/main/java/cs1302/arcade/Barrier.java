@@ -27,7 +27,7 @@ public class Barrier extends Rectangle {
      */
     public Barrier(int length, int width){
         super(length, width);
-	this.setFill(barrier1);
+	this.setFill(BARRIER_1);
         this.width = width;
         this.height = height;
 	this.setDmgLvl(1);
