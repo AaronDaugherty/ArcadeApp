@@ -96,7 +96,7 @@ public class GameSI extends Group {
 		application.setScene(application.getScene());
 		this.pause();
 	});
-        menu.setTranslateX(175);
+        menu.setTranslateX(200);
         menu.setTranslateY(50);
         
         //Restart button for SpaceInvaders    
