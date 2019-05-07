@@ -12,7 +12,7 @@ that the Markdown is transformed into nice looking HTML.
 3. **PROB:** Easy Peasy lemon squeazy. Only thing was the aliens in SpaceInvaders were originally in a Vbox, which
     caused a lot of problems, but we fixed it.
     
-## TUE 2019-04-23 @ 11:15 AM EST
+## TUE 2019-04-30 @ 5:00 PM EST
     
 1. **DONE:** Completed movement and scoring for 2048. Made graphics for 2048. Figured out what to do to implement space invaders. 
 2. **TODO:** Begin working on space invaders and finish. Make graphics for space invaders. Clean the rest of the project.
